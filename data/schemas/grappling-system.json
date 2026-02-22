@@ -1,222 +1,555 @@
+
 {
-  "Moves": {
-    "Standing": {
-      "Weak Striking": {
-        "Closer to Opponent": {
-          "Weak Arm Striking 1": ["(B)"],
-          "Weak Arm Striking 2": ["(←/→/↑/↓) + (B)"],
-        },
-          "Further from Opponent": {
-          "Weak Leg Striking": ["(B)"],
-          "Weak Leg Striking": ["(←/→/↑/↓) + (B)"],
+  "Grappling": {
+    "Front Grapple": {
+      "Front Weak Grapple (Tap A)": {
+        "Opponent State": "Standing Facing Player",
+        "Setup": "Tap A in Front of Standing Opponent",
+        "Moves": {
+          "A": "Front Weak Grapple 1",
+          "←/→ + A": "Front Weak Grapple 2",
+          "↑ + A": "Front Weak Grapple 3",
+          "↓ + A": "Front Weak Grapple 4",
+          "B": "Front Weak Grapple 5",
+          "←/→ + B": "Front Weak Grapple 6",
+          "↑ + B": "Front Weak Grapple 7",
+          "↓ + B": "Front Weak Grapple 8"
         }
       },
-      "Strong Striking (Hold)": {
-        "Strong Striking 1": ["(B)"],
-        "Strong Striking 2": ["(←/→/↑/↓) + (B)"],
-        "Strong Striking 3": ["(A + B)"]
-      },
-      "Running Attack": {
-        "Weak Running Attack 1": ["(C-Down) + (B)"],
-        "Weak Running Attack 2": ["(C-Down) + (A + B)"],
-        "Strong Running Attack 1": ["(←/→/↑/↓) + C-Down) + (B)"],
-        "Strong Running Attack 2": ["(←/→/↑/↓) + C-Down) + (B)"]
-      },
-      "Turnbuckle": {
-        "Turnbuckle Attack 1": ["(B)"],
-        "Turnbuckle Attack 2": ["(←/→/↑/↓) + (B)"],
-        "Running Turnbuckle Attack 1": ["(C▼) + (B)"],
-        "Running Turnbuckle Attack 2": ["(C▼) + (A + sB)"],
-        "Irish Whip to Corner Counter": ["(L) or (R) + Tap / Mash (A) and (B)"],
-        "Tree of Woe Attack 1": ["(B)"],
-        "Tree of Woe Attack 2": ["(←/→/↑/↓) + (B)"],
-        "Running Tree of Woe Attack": ["(C-Down) + (B)"],
-      },
-      "Apron Attack": {
-        "Apron Attack to Inside": ["(B)"]
-      },
-      "Irish Whip Attack": {
-        "Irish Whip Attack": ["(B)"]
-      },
-      "Recovering Attack": {
-        "Ducking Attack": ["(B)"]
-      },
-      "Counter Attack": {
-        "Counter Punch": ["(R)"],
-        "Special Counter Punch": ["(R)"],
-        "Counter Kick 1": ["(A)"],
-        "Counter Kick 1": ["(B)"],
-        "Special Counter Kick": ["(R)"]
-      },
+      "Front Strong Grapple (Hold A)": {
+        "Opponent State": "Standing Facing Player",
+        "Setup": "Hold A in Front of Standing Opponent",
+        "Moves": {
+          "A": "Front Strong Grapple 1",
+          "←/→ + A": "Front Strong Grapple 2",
+          "↑ + A": "Front Strong Grapple 3",
+          "↓ + A": "Front Strong Grapple 4",
+          "B": "Front Strong Grapple 5",
+          "←/→ + B": "Front Strong Grapple 6",
+          "↑ + B": "Front Strong Grapple 7",
+          "↓ + B": "Front Strong Grapple 8",
+          "Control Stick": "Front Finisher"
+        }
+      }
     },
-    "Grappling": {
-      "Front Grapple": {
-        "Front Weak Grapple": {
-          "Front Weak Grapple 1": ["(A)"],
-          "Front Weak Grapple 2": ["(←/→) + (A)"],
-          "Front Weak Grapple 3": ["(↑) + (A)"],
-          "Front Weak Grapple 4": ["(↓) + (A)"],
-          "Front Weak Grapple 5": ["(B)"],
-          "Front Weak Grapple 6": ["(←/→) + (B)"],
-          "Front Weak Grapple 7": ["(↑) + (B)"],
-          "Front Weak Grapple 8": ["(↓) + (B)"]
-        },
-        "Front Strong Grapple": {
-          "Front Strong Grapple 1": ["(A)"],
-          "Front Strong Grapple 2": ["(←/→) + (A)"],
-          "Front Strong Grapple 3": ["(↑) + (A)"],
-          "Front Strong Grapple 4": ["(↓) + (A)"],
-          "Front Strong Grapple 5": ["(B)"],
-          "Front Strong Grapple 6": ["(←/→) + (B)"],
-          "Front Strong Grapple 7": ["(↑) + (B)"],
-          "Front Strong Grapple 8": ["(↓) + (B)"],
-          "Front Special Grapple": ["(Control Stick)"]
-        },
+    "Back Grapple": {
+      "Back Weak Grapple (Tap A)": {
+        "Opponent State": "Standing facing away",
+        "Setup": "Tap A when behind a standing opponent",
+        "Moves": {
+          "A": "Back Weak Grapple 1",
+          "←/→/↑/↓ + A": "Back Weak Grapple 2",
+          "B": "Back Weak Grapple 3",
+          "←/→/↑/↓ + B": "Back Weak Grapple 4"
+        }
       },
-      "Back Grapple": {
-        "Back Weak Grapple": {
-          "Back Weak Grapple 1": ["(A)"],
-          "Back Weak Grapple 2": ["←/→/↑/↓ + (A)"],
-          "Back Weak Grapple 3": ["(B)"],
-          "Back Weak Grapple 4": ["←/→/↑/↓ + (B)"]
-        },
-        "Back Strong Grapple": {
-          "Back Strong Grapple 1": ["(A)"],
-          "Back Strong Grapple 2": ["←/→/↑/↓ + (A)"],
-          "Back Strong Grapple 3": ["(B)"],
-          "Back Strong Grapple 4": ["←/→/↑/↓ + (B)"],
-          "Back Special Grapple": ["(Control Stick)"]
-        },
+      "Back Strong Grapple (Hold A)": {
+        "Opponent State": "Standing facing away",
+        "Setup": "Hold A when behind a standing opponent",
+        "Moves": {
+          "A": "Back Strong Grapple 1",
+          "←/→/↑/↓ + A": "Back Strong Grapple 2",
+          "B": "Back Strong Grapple 3",
+          "←/→/↑/↓ + B": "Back Strong Grapple 4",
+          "Control Stick": "Back Finisher"
+        }
+      }
+    },
+    "Reversals": {
+      "Opponent State": "Initiating a Grapple",
+      "Setup": "",
+      "Moves": [
+        "Back Weak Grapple Counter",
+        "Back Strong Grapple Counter"
+      ]
+    }
+  },
+  "Standing": {
+    "Weak Striking": {
+      "Arm Striking": {
+        "Opponent State": [
+          "Standing facing player",
+          "Standing facing away"
+        ],
+        "Setup": "Standing Close to Opponent",
+        "Moves": {
+          "(Tap) B": "Weak Arm Strike 1",
+          "←/→/↑/↓ + (Tap) B": "Weak Arm Strike 2"
+        }
       },
-      "Reversals": {
-        "Back Weak Grapple Counter": [],
-        "Back Strong Grapple Counter": []
+      "Leg Striking": {
+        "Opponent State": [
+          "Standing facing player",
+          "Standing facing away"
+        ],
+        "Setup": "Standing Less-Close to Opponent",
+        "Moves": {
+          "(Tap) B": "Weak Leg Strike 1",
+          "←/→/↑/↓ + (Tap) B": "Weak Leg Strike 2"
+        }
+      }
+    },
+    "Strong Striking (Hold B)": {
+      "Opponent State": [
+        "Standing facing player",
+        "Standing facing away"
+      ],
+      "Setup": "Stand Near Opponent",
+      "Moves": {
+        "(Hold) B": "Strong Strike 1",
+        "←/→/↑/↓ + (Hold) B": "Strong Strike 2",
+        "A + B": "Strong Strike 3"
+      }
+    },
+    "Recovering (Hold R When Getting Up)": {
+      "Opponent State": [
+        "Standing facing player",
+        "Standing facing away"
+      ],
+      "Setup": "Hold R When Getting Up",
+      "Moves": {
+        "B": "Ducking Attack"
+      }
+    },
+    "Counter Attack (Strike Counters)": {
+      "Counter Punch": {
+        "Opponent State": "Throwing a Punch",
+        "Setup": "Timing the button press exactly",
+        "Moves": {
+          "R": "Counter Punch",
+          "R (with Special)": "Special Counter Punch"
+        }
       },
-      "Irish Whip Grapple": {
-        "Front Weak Grapple 1": ["(Tap A)"],
-        "Front Weak Grapple 2": ["(Hold A)"],
-        "Front Strong Grapple 1": ["(Tap A)"],
-        "Front Strong Grapple 2": ["(Hold A)"],
-        "Front Special Grapple": ["(Control Stick)"]
+      "Counter Kick": {
+        "Opponent State": "",
+        "Setup": "",
+        "Moves": {
+          "A": "Counter Kick 1",
+          "B": "Counter Kick 2"
+        }
+      }
+    },
+    "Walking": {
+      "Opponent State": "Any",
+      "Setup": "n/a",
+      "Moves": {
+        "←/→/↑/↓": "Walking Style"
+      }
+    },
+    "Running (C-Down)": {
+      "Running Attack (Strike)": {
+        "Opponent State": "Standing",
+        "Setup": "Press C-Down to run, then press attack buttons",
+        "Moves": {
+          "Run + B": "Weak Running Attack 1",
+          "Run + A + B": "Weak Running Attack 2",
+          "←/→/↑/↓ + Run + B": "Strong Running Attack 1",
+          "←/→/↑/↓ + Run + A + B": "Strong Running Attack 2"
+        }
       },
       "Running Grapple": {
-        "Running Front Grapple": ["(C-Down) + (A)"],
-        "Running Back Grapple": ["(C-Down) + (A)"]
+        "Opponent State": "Standing",
+        "Setup": "Press C-Down to run, then press A when close",
+        "Moves": {
+          "Run + A (To Front of Opponent)": "Running Front Grapple",
+          "Run + A (To Back of Opponent)": "Running Back Grapple"
+        }
       },
-      "Front Turnbuckle Grapple": {
-        "Front Weak Grapple 1": ["(A)"],
-        "Front Weak Grapple 2": ["(B)"],
-        "Front Strong Grapple 1": ["(A)"],
-        "Front Strong Grapple 2": ["(B)"],
-        "Front Special Grapple": ["(Control Stick)"],
-        "Front Counter Grapple": []
+      "Running Ground Attack (Strike)": {
+        "Opponent State": "On Mat (Facing Up, Down, or Sitting)",
+        "Setup": "Press C-Down to run, then press B when near downed opponent",
+        "Moves": {
+          "Run + B (To Opponent Facing Up)": "Facing-Up Running Ground Attack",
+          "Run + B (To Opponent Facing Down)": "Facing-Down Running Ground Attack",
+          "Run + B (To Opponent Sitting Up)": "Sitting-Up Running Ground Attack",
+          "Run + B (To Opponent Sitting Down)": "Sitting-Down Running Ground Attack"
+        }
       },
-      "Back Turnbuckle Grapple": {
-        "Back Weak Grapple 1": ["(A)"],
-        "Back Weak Grapple 2": ["(B)"],
-        "Back Strong Grapple 1": ["(A)"],
-        "Back Strong Grapple 2": ["(B)"],
-        "Back Special Grapple": ["(Control Stick)"],
-        "Back Counter Grapple": []
-      },
-      "Apron Grapple": {
-        "Weak Grapple to Apron": [],
-        "Strong Grapple to Apron": [],
-        "Special Grapple to Apron": [],
-        "Weak Grapple from Apron": [],
-        "Strong Grapple from Apron": [],
-        "Special Grapple from Apron": [],
-        "Counter Grapple from Apron": [],
-        "Counter Grapple to Apron"
-      },
-      "Dounble Team": {
-        "Front Grapple": [],
-        "Back Grapple": [],
-        "Sandwich Grapple": [],
-        "Irish Whip Grapple": [],
-        "Counter Attack": []        
+      "Evasion": {
+        "Opponent State": "Any",
+        "Setup": "Press C-Down to run, then press R",
+        "Moves": {
+          "Run + R": "Evading Move"
+        }
       }
-    },
-    "Ground": {
-      "Upper Body Grapple": {
-        "Facing Up": ["(A)"],
-        "Facing Down": ["(A)"],
-        "Sitting Up": ["(A)"],
-        "Sitting Down": ["(A)"],
-        "Facing Up (Special)": ["(A)"],
-        "Facing Down (Special)": ["(A)"]
-      },
-      "Lower Body Grapple": {
-        "Facing Up": ["(A)"],
-        "Facing Down": ["(A)"],
-        "Facing Up (Special)": ["(A)"],
-        "Facing Down (Special)": ["(A)"]
-      },
-      "Ground Attack": {
-        "Facing Up": ["(B)"],
-        "Facing Down": ["(B)"],
-        "Sitting Up": ["(B)"],
-        "Sitting Down": ["(B)"]
-      },
-      "Running Ground Attack": {
-        "Facing Up": ["(C-Down) + (B)"],
-        "Facing Up (Special)": ["(C-Down) + (B)"],
-        "Facing Down": ["(C-Down) + (B)"],
-        "Sitting Up": ["(C-Down) + (B)"],
-        "Sitting Down": ["(C-Down) + (B)"]
-      }
-    },
-    "Flying": {
-      "Flying Attack": {
-      "Standing Opponent": ["(C-Down) + (D-Pad) Torwards corner"],
-      "Standing Opponent to Outside": ["(C-Down) + (D-Pad) Torwards corner"],
-      "Standing Opponend (Special)": ["(C-Down) + (D-Pad) Torwards corner"],
-      "Laying Opponent": ["(C-Down) + (D-Pad) Torwards corner"],
-      "Laying Opponent to Outside": ["(C-Down) + (D-Pad) Torwards corner"],
-      "Laying Opponend (Special)": ["(C-Down) + (D-Pad) Torwards corner"],
-      },
-      "Turnbuckle Inside Attack (Bret's Rope)": {
-        "Turnbuckle Inside Attack": ["(A)"]
-      },
-      "Flying Attack to Outside": {
-        "Flying Attack": ["(A)"],
-        "Running Diving Attack 1": ["(C-Down) + (A)"],
-        "Running Diving Attack 2": ["(←/→/↑/↓ + C-Down) + (A)"]
-      },
-      "Running Diving Taunt": {
-        "Running Diving Taunt": ["(C-Down) + (Control Stick)"]
-      },
-      "Flying Attack From Apron": {
-        "Flying Attack to Outside": ["(A)"],
-        "Running Flying Attack to Outside": ["(C-Down) + (A)"],
-        "Flying Attack To Standing Opponent Inside": ["(A)"],
-        "Flying Attack To Laying Opponent Inside": ["(A)"],
-        "Flying Attack To Standing Opponent Inside (Special)": ["(A)"]
-      },
-      "Rope Inside Attack": {
-        "Rope Inside Attack": ["(A)"]
-      },
-      "Rebound Flying Attack": {
-        "Rebound Flying Attack": ["(C-Down) + A"]
-      },
-      "Double Team Flying Attack": {
-        "From Top Turnbuckle": ["(C-Down) + (D-Pad) Torwards corner"],
-        "From Top Turnbuckle to Outside": ["(C-Down) + (D-Pad) Torwards corner"],
-        "From Apron": ["(A)"]
-      }
-    },
-    "Taunt": {
-      "Taunt 1": ["Control Stick Up"],
-      "Taunt 2": ["Control Stick Left"],
-      "Taunt 3": ["Control Stick Right"],
-      "Ducking Taunt": ["Control Stick Down"],
-      "Special Taunt": ["Control Stick"],
-      "Celebration Taunt": ["n/a"],
-      "Corner Taunt": ["Control Stick"],
-      "Turnbuckle Taunt": ["Control Stick"],
-      "Apron Taunt": ["n/a"],
-      "Irish Whip Evasion": ["(C-Left) + (R)"]
     }
-  }
+  },
+  "Ground": {
+    "Upper Body Submission": {
+      "Opponent States": {
+        "Facing Up": "Laying flat on their back",
+        "Facing Down": "Laying flat on their stomach",
+        "Sitting Up": "Sitting with legs straight out in front of them",
+        "Sitting Down": "Kneeling on all fours"
+      },
+      "Setup": "Stand near opponent's head and press A",
+      "Moves": {
+        "A (Facing Up)": "Facing-Up Upper Body Submission",
+        "A (Facing Down)": "Facing-Down Upper Body Submission",
+        "A (Sitting Up)": "Sitting-Up Upper Body Submission",
+        "A (Sitting Down)": "Sitting-Down Upper Body Submission",
+        "A (Special - Facing Up)": "Facing-Up Upper Body Finisher",
+        "A (Special - Facing Down)": "Facing-Down Upper Body Finisher"
+      }
+    },
+    "Lower Body Submission": {
+      "Opponent States": {
+        "Facing Up": "Laying flat on back",
+        "Facing Down": "Laying flat on stomach"
+      },
+      "Setup": "Stand near opponent's feet and press A",
+      "Moves": {
+        "A (To Opponent Facing Up)": "Facing-Up Lower Body Submission",
+        "A (To Opponent Facing Down)": "Facing-Down Lower Body Submission",
+        "A (With Special - To Opponent Facing Up)": "Facing-Up Lower Body Finisher",
+        "A (With Special - To Opponent Facing Down)": "Facing-Down Lower Body Finisher"
+      }
+    },
+    "Ground Attack (Strike)": {
+      "Opponent States": {
+        "Facing Up": "Laying flat on back",
+        "Facing Down": "Laying flat on stomach",
+        "Sitting Up": "Sitting with legs straight out",
+        "Sitting Down": "Kneeling on all fours"
+      },
+      "Setup": "Stand near any part of the opponent and press B",
+      "Moves": {
+        "B (To Opponent Facing Up)": "Facing-Up Ground Attack",
+        "B (To Opponent Facing Down)": "Facing-Down Ground Attack",
+        "B (To Opponent Sitting Up)": "Sitting-Up Ground Attack",
+        "B (To Opponent Sitting Down)": "Sitting-Down Ground Attack"
+      }
+    }
+  },
+  "Turnbuckle": {
+    "Turnbuckle Attack": {
+      "Opponent State": "Standing in corner with back to turnbuckle",
+      "Setup": "Stand in front of opponent",
+      "Moves": {
+        "B": "Turnbuckle Attack 1",
+        "←/→/↑/↓ + B": "Turnbuckle Attack 2",
+        "Run + B": "Running Turnbuckle Attack 1",
+        "Run + A + B": "Running Turnbuckle Attack 2"
+      }
+    },
+    "Corner Counter": {
+      "Opponent State": "Standing/Running after Irish-whipping player towards turnbuckle",
+      "Setup": "While being Irish-whipped into turnbuckle",
+      "Moves": {
+        "Rapidly Tapping A/B/L/R": "Irish Whip to Corner-Counter"
+      }
+    },
+    "Tree-of-Woe Attack": {
+      "Opponent State": "Hanging upside down in 'tree-of-woe' position",
+      "Setup": "Irish-whipping an opponent into the corner, initiating a grapple (weak or strong), and pressing the L Button",
+      "Moves": {
+        "B": "Tree-of-Woe Attack 1",
+        "←/→/↑/↓ + B": "Tree-of-Woe Attack 2",
+        "Run + B": "Running Tree-of-Woe Attack"
+      }
+    },
+    "Front Turnbuckle Grapple": {
+      "Front Turnbuckle Weak Grapple (Tap A)": {
+        "Opponent State": "Standing in corner with back to turnbuckle",
+        "Setup": "Initiate weak grapple to opponent in corner",
+        "Moves": {
+          "A": "Front Turnbuckle Weak Grapple 1",
+          "B": "Front Turnbuckle Weak Grapple 2"
+        }
+      },
+      "Front Turnbuckle Strong Grapple (Hold A)": {
+        "Opponent State": "Standing in corner with back to turnbuckle",
+        "Setup": "Initiate strong grapple to opponent in corner",
+        "Moves": {
+          "A": "Front Turnbuckle Strong Grapple 1",
+          "B": "Front Turnbuckle Strong Grapple 2",
+          "Control Stick (With Special)": "Front Turnbuckle Finisher"
+        }
+      }
+    },
+    "Back Turnbuckle Grapple": {
+      "Back Turnbuckle Weak Grapple": {
+        "Opponent State": "Standing in corner facing turnbuckle",
+        "Setup": "Initiate weak grapple (Tap A) to opponent in corner and press C-Left to turn them around, then A to back-grapple",
+        "Moves": {
+          "A": "Back Turnbuckle Weak Grapple 1",
+          "B": "Back Turnbuckle Weak Grapple 2"
+        }
+      },
+      "Back Turnbuckle Strong Grapple": {
+        "Opponent State": "Standing in corner facing turnbuckle",
+        "Setup": "Initiate strong grapple (Hold A) to opponent in corner and press C-Left to turn them around, then A to back-grapple",
+        "Moves": {
+          "A": "Back Turnbuckle Strong Grapple 1",
+          "B": "Back Turnbuckle Strong Grapple 2",
+          "Control Stick (With Special)": "Back Turnbuckle Finisher"
+        }
+      }
+    },
+    "Counter Grapple (to Flying-Attack)": {
+      "Opponent State": "On Top Rope (Facing Player or Away)",
+      "Setup": "Press A as opponent prepares to fly",
+      "Moves": {
+        "A (Opponent Facing Player)": "Front Flying Counter Grapple",
+        "A (Opponent Facing Away)": "Back Flying Counter Grapple"
+		}
+    },
+	"Flying Attack": {
+	      "Standing Opponent Flying Attack": {
+	        "Opponent State": "Standing in Ring",
+	        "Setup": "D-Pad plus run (C-Down) into turnbuckle, release D-Down to jump off",
+	        "Moves": "Standing Opponent Flying Attack"
+			},
+			"Standing Opponent Flying Attack to Outside": {
+				"Opponent State": "Standing Outside of Ring",
+		        "Setup": "D-Pad plus run (C-Down) into turnbuckle, release D-Down to jump off",
+				"Moves": "Standing Opponent Flying Attack to Outside"
+			},
+			"Standing Opponent Flying Finisher": {
+				"Opponent State": "Standing In or Outside of Ring",
+		        "Setup": "With Special, D-Pad plus run (C-Down) into turnbuckle, release D-Down to jump off",
+				"Moves": "Standing Opponent Flying Finisher"
+			},
+			"Laying Opponent Flying Attack": {
+				"Opponent State": "Laying Down In Ring",
+		        "Setup": "D-Pad plus run (C-Down) into turnbuckle, release D-Down to jump off",
+				"Moves": "Laying Opponent Flying Attack"
+			},
+			"Laying Opponent Flying Attack to Outside": {
+				"Opponent State": "Laying Down Outside of Ring",
+		        "Setup": "D-Pad plus run (C-Down) into turnbuckle, release D-Down to jump off",
+				"Moves": "Laying Opponent Flying Attack to Outside"
+	      },
+	      "Laying Opponent Flying Finisher": {
+				"Opponent State": "Laying Down In or Outside of Ring",
+		        "Setup": "With Special, D-Pad plus run (C-Down) into turnbuckle, release D-Down to jump off",
+				"Moves": "Laying Opponent Flying Finisher"
+			},
+			"Turnbuckle Inside Attack (Bret's Rope Attack)": {
+				"Opponent State": "Laying Down Inside Ring Near Corner",
+				"Setup": "In corner press D-Pad torwards corner while pressing A",
+				"Moves": {
+					"A": "Attack from Second Rope"
+				}
+			}
+		},
+		"Corner Taunt": {
+			"Opponent State": "Any",
+			"Setup": "Stand in corner pressing D-Pad towards turnbuckle plus Control Stick",
+			"Moves": {
+				"Control Stick": "Corner Taunt"
+			}
+		},
+		"Turnbuckle Taunt": {
+			"Opponent State": "Any",
+			"Setup": "From top turnbuckle, before releasing C-Down, taunt with Control Stick",
+			"Moves": "Control Stick": "Top Turnbuckle Taunt"
+		}
+	},
+	"Ringside": {
+		"Grapple to Apron": {
+			"Opponent State": "Standing on Apron",
+			"Setup": "From inside ring, initiate weak or strong grapple to opponent standing on apron",
+			"Moves": {
+			"A or B": "Weak Grapple to Apron",
+			"A or B": "Strong Grapple to Apron",
+			"Control Stick": "Special Grapple to Apron"
+			}
+		},
+		"Counter Grapple from Apron": {
+			"Opponent State": "Grappling player in ring from ring apron",
+			"Setup": "Being grappled by opponent from apron",
+			"Moves": {
+				"Rapidly tapping A and B": "Counter Grapple from Apron"
+			}
+		},
+		"Rope Inside Attack": {
+			"Opponent State": "Laying on mat",
+			"Setup": "Standing between downed opponent and ring ropes",
+			"Moves": {
+				"D-Pad + A": "Rope Inside Attack"
+			}
+		},
+		"Flying Attack to Outside": {
+			"Flying Attack": {
+				"Opponent State": "Outside of ring",
+				"Setup": "Standing inside ring up against ring ropes",
+				"Moves": {
+					"D-Pad + A": "Flying Attack"
+				}
+			},
+			"Running Diving Attack": {
+				"Opponent State": "Outside of ring",
+				"Setup": "Inside ring running torwards ring ropes",
+				"Moves": {
+					"A": "Running Diving Attack 1",
+					"D-Pad + A": "Running Diving Attack 2"
+				}
+			}
+		},
+		"Running Diving Taunt": {
+			"Opponent State": "Outside of ring",
+			"Setup": "Inside ring running torwards ring ropes",
+			"Moves": {
+				"Control Stick": "Running Diving Taunt"
+			}
+		},
+		"Rebound Flying Attack": {
+			"Opponent State": "Standing",
+			"Setup": "Inside ring running torwards ring ropes",
+			"Moves": {
+				"A": "Rebound Flying Attack"
+			}
+		}
+	},
+	"Apron": {
+		"Apron Attack": {
+			"Apron Strike to Inside": {
+				"Opponent State": "Standing inside of ring",
+				"Setup": "Standing on ring apron",
+				"Moves": {
+					"B": "Apron Strike to Inside"
+				}
+			},
+			"Apron Strike to Outside": {
+				"Opponent State": "Standing outside of ring",
+				"Setup": "Standing on ring apron",
+				"Moves": {
+					"B": "Apron Strike to Outside"
+				}
+			},
+		},
+		"Grapple From Apron": {
+			"Opponent State": "Standing inside ring near ropes",
+			"Setup": "Initiate weak or strong grapple to opponent in ring while standing on ring apron",
+			"Moves": {
+				"A or B": "Weak Grapple from Apron",
+				"A or B": "Strong Grapple from Apron",
+				"Control Stick": "Finisher from Apron"
+			}
+		},
+		"Counter Grapple from Apron": {
+			"Opponent State": "Grapping player on ring apron while Standing inside ring",
+			"Setup": "Being grappled by opponent while standing on ring apron",
+			"Moves": {
+				"Rapidly Tapping A and B": "Counter Grapple from Apron"
+			}
+		},		
+		"Flying Attack from Apron": {
+			"Flying Attack": {
+				"Opponent State": "Outside of ring",
+				"Setup": "Standing on ring apron",
+				"Moves": {
+					"D-Pad + A": "Flying Attack"
+				}
+			},
+			"Running Flying Attack": {
+				"Opponent State": "Outside of ring",
+				"Setup": "Running on ring apron",
+				"Moves": {
+					"A": "Running Flying Attack"
+				}
+			},
+		},
+		"Flying Attack to Ring": {
+			"Opponent State": "Inside Ring",
+			"Setup": "Standing on Ring Apron",
+			"Moves": {
+				"A": "Flying Attack (Standing Opponent)",
+				"A": "Flying Attack (Laying Opponent)",
+				"A": "Flying Attack (Special)"
+			}
+		},
+		"Apron Taunt": {
+			"Opponent State": "Any",
+			"Setup": "Standing on ring apron",
+			"Moves": {
+				"Control Stick": "Apron Taunt"
+			}
+		}
+	},
+	"Irish Whip": {
+		"Irish Whip Attack (Strike)": {
+			"Opponent State": "Running Torwards Opponent",
+			"Setup": "Standing",
+			"Moves": {
+				"B": "Irish Whip Attack"
+			}
+		},
+		"Irish Whip Grapple": {
+			"Irish Whip Grapple (Weak)": {
+				"Opponent State": "Irish-whipped from weak grapple, running torwards player",
+				"Setup": "Standing, opponent running torwards player",
+				"Moves": {
+					"Tap A": "Weak Irish-Whip Grapple 1",
+					"Hold A": "Weak Irish-Whip Grapple 2"
+				}
+			},
+			"Irish Whip Grapple (Strong)": {
+				"Opponent State": "Irish-whipped from strong grapple, running torwards player",
+				"Setup": "Standing, opponent running torwards player",
+				"Moves": {
+					"Tap A": "Strong Irish-Whip Grapple 1",
+					"Hold A": "Strong Irish-Whip Grapple 2",
+					"Control Stick": "Irish-Whip Finisher"
+				}
+			}
+		},
+	"Taunt": {
+		"Taunt": {
+			"Opponent State": "Any",
+			"Setup": "Standing",
+			"Moves": {
+				"Control Stick Up": "Standing Taunt 1",
+				"Conrtol Stick Left": "Standing Taunt 2",
+				"Control Stick Right": "Standing Taunt 3"
+			}
+		},
+		"Special Taunt": {
+			"Opponent State": "Any",
+			"Setup": "Standing, has special",
+			"Moves": {
+				"Control Stick": "Special Taunt"		
+		},
+		"Ducking Taunt": {
+			"Opponent State": "Any",
+			"Setup": "Standing or ducking",
+			"Moves": {
+				"Control Stick Down": "Ducking Taunt"
+			}
+		},
+		"Celebration Taunt": {
+			"Opponent State": "Defeated, match over",
+			"Setup": "Win match",
+			"Moves": "Celebration Taunt"
+		},
+		"Entry Way Taunt": {
+			"Opponent State": "n/a",
+			"Setup": "Player's character making way to ring",
+			"Moves": "Entry Way Taunt"		
+		}
+	},
+	"Double-Team": {
+		"Double-Team Grapple": {
+			"Standing Double Team Grapple": {
+				"Opponent State": "Standing",
+				"Setup": "Player and another character grapple opponent at same time from front, back, or sandwich position",
+				"Moves": {
+					"A": ["Front Double-Team Grapple", "Back Double-Team Grapple", "Sandwich Double-Team Grapple"]
+				}
+			},
+			"Running Double-Team Grapple": {
+				"Opponent State": "Running torwards player and another opponent",
+				"Setup": "Standing",
+				"Moves": {
+					"A": "Running Double-Team Grapple"
+				}
+			}
+		},
+		"Double Team Flying Attack": {
+			"Opponent State": "Held up on the shoulders of an opponent",
+			"Setup": "To hold opponent up on shoulders, grapple and C-Up.  When Opponent on shoulders of other player, execute top-rope Flying Attack or Flying Attack from Apron",
+			"Moves": ["From Top Rope Into Ring", "From Top Rope Outside", "From Apron"]
+		}
+	}
 }
-
