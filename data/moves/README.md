@@ -39,7 +39,7 @@ Each move entry contains:
 |---|---|---|
 | `id` | string | Unique move identifier |
 | `name` | string | Display name |
-| `power` | string | Damage tier: `F` → `E` → `D` → `C` → `B` → `A` → `S` (weakest to strongest), `G` for special gag moves |
+| `power` | string | Damage tier: `S` → `A` → `B` → `C` → `D` → `E` → `F` → `G` (strongest to weakest) |
 | `ko` | boolean | Whether this move can cause a knockout |
 | `bleed` | boolean | Whether this move can open a blade job |
 | `feature` | string | Special outcome: `Pin`, `Submit`, or `null` |
