@@ -16,7 +16,7 @@ VPG Engine aims to faithfully recreate the core gameplay experience of WWF No Me
 - **Highly customizable** - JSON-driven content with full modding support
 - Built with [Babylon.js](https://www.babylonjs.com/),
 
-Inspired by the gameplay of **WWF No Mercy** (N64) and the visual style of the N64-to-GameCube era. Characters are built in [Blockbench](https://www.blockbench.net/) and exported as GLB files with per-part texture mapping designed to be compatible with original No Mercy texture rips.  Currently recreating No Mercy as a model, then removing any copyrighted IP from the base project once everything is in place.
+Inspired by the gameplay of **WWF No Mercy** (N64) and the visual style of the N64-to-GameCube era. Characters are built in [Blockbench](https://www.blockbench.net/) and exported as GLB files with per-part texture mapping designed to be compatible with original No Mercy texture rips.  The engine is being developed using No Mercy as a design reference, with all final assets being original creations.
 
 
 ### What We're Recreating
