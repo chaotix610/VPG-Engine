@@ -12,23 +12,22 @@ VPG Engine aims to faithfully recreate the core gameplay experience of WWF No Me
 
 - **Completely free and open-source** (GNU GPL 3.0)
 - **Built on modern web technology** (JavaScript/Web-based)
-- **Legally clean** - zero copyrighted content
-- **Highly customizable** - JSON-driven content with full modding support
-- Built with [Babylon.js](https://www.babylonjs.com/),
+- **Legally clean** — zero copyrighted content in the final release
+- **Highly customizable** — JSON-driven content with full modding support
+- Built with [Babylon.js](https://www.babylonjs.com/)
 
-Inspired by the gameplay of **WWF No Mercy** (N64) and the visual style of the N64-to-GameCube era. Characters are built in [Blockbench](https://www.blockbench.net/) and exported as GLB files with per-part texture mapping designed to be compatible with original No Mercy texture rips.  The engine is being developed using No Mercy as a design reference, with all final assets being original creations.
-
+The engine is being developed using No Mercy as a design reference, with all final assets being original creations. Characters are built in [Blockbench](https://www.blockbench.net/) and exported as GLB files with per-part texture mapping.
 
 ### What We're Recreating
 
-- **Grappling system** - The iconic position-based grappling mechanics
-- **Strike System and timing** - Timing and counter-strike systems
-- **Momentum (Attitude) meter** - The risk/reward special move system
-- **Damage scaling** - Body part damage and move effectiveness
-- **Reversal windows** - Frame-perfect timing and reversals
-- **Ground game** - Submission, pin, and ground attack systems
-- **Movement & physics** - Running, ropes, turnbuckles, and environmental interaction
-- **Environmental accuracy** - Ring dimensions, collision points, and object behavior
+- **Grappling system** — The iconic position-based grappling mechanics
+- **Strike system and timing** — Timing and counter-strike systems
+- **Momentum (Attitude) meter** — The risk/reward special move system
+- **Damage scaling** — Body part damage and move effectiveness
+- **Reversal windows** — Frame-perfect timing and reversals
+- **Ground game** — Submission, pin, and ground attack systems
+- **Movement & physics** — Running, ropes, turnbuckles, and environmental interaction
+- **Environmental accuracy** — Ring dimensions, collision points, and object behavior
 
 ---
 
@@ -40,6 +39,8 @@ The core design principles are:
 - **No Mercy-faithful controls** — weak/strong grapple system, directional move modifiers, special meter, finishers
 - **Data-driven characters** — every wrestler is defined entirely by JSON files, making it easy to add new characters, attires, and move sets without touching engine code
 - **Texture compatibility** — the texture system is designed so that PNG files ripped from the original No Mercy ROM (via emulator tools) can be dropped into a character folder and mapped to the model with a manifest file
+
+---
 
 ## Folder Structure
 
@@ -119,6 +120,8 @@ vpg-engine/
 └── README.md
 ```
 
+---
+
 ## Character System
 
 ### Models
@@ -167,7 +170,7 @@ If a body part shares a texture with another part (common in the original game),
 
 ### Move Assignments
 
-Each wrestler has a `moves.json` file that assigns specific moves from the master move database to their input slots. This is what makes The Rock feel different from Stone Cold — they use the same engine and the same animation pool, but their move slot assignments are unique to them.
+Each wrestler has a `moves.json` file that assigns specific moves from the master move database to their input slots. This is what makes one wrestler feel different from another — they use the same engine and the same animation pool, but their move slot assignments are unique to them.
 
 ```json
 {
@@ -184,58 +187,6 @@ Each wrestler has a `moves.json` file that assigns specific moves from the maste
 ```
 
 The full list of available moves, their power ratings, KO potential, bleed potential, and special features (Pin, Submit, etc.) is documented in `data/moves/Moves.md`.
-
-## Move System
-
-### Move Slots
-
-The move system is built around **slots** — named input combinations that each wrestler fills with a move of their choosing. The slot system is faithful to No Mercy's original design.
-
-The top-level slot categories are:
-
-|Category|Description|
-|---|---|
-|**Grappling**|Front/Back weak and strong grapples, each with 8 directional variants|
-|**Standing**|Weak strikes, strong strikes, running attacks, counter attacks|
-|**Ground**|Upper/lower body submissions, ground strikes — varies by opponent position (facing up, down, sitting)|
-|**Turnbuckle**|Corner grapples, tree-of-woe attacks, flying attacks from top rope|
-|**Ringside**|Attacks and grapples through/over the ropes, diving attacks to outside|
-|**Apron**|Attacks and grapples from the ring apron|
-|**Irish Whip**|Follow-up moves after whipping an opponent into the ropes|
-|**Taunt**|Standing, ducking, corner, turnbuckle, celebration, and entryway taunts|
-|**Double-Team**|Co-op grapples and flying attacks with a partner|
-
-### Input Logic
-
-Inputs follow the original N64 controller layout, mapped to keyboard/gamepad:
-
-|N64 Button|Action|
-|---|---|
-|**A (tap)**|Initiate weak grapple|
-|**A (hold)**|Initiate strong grapple|
-|**B (tap)**|Weak strike|
-|**B (hold)**|Strong strike|
-|**Control Stick**|Execute finisher (when Special is active)|
-|**C-Down**|Run|
-|**R**|Counter / reversal|
-|**L**|Irish whip / rope interaction|
-
-Directional modifiers (←/→/↑/↓) on the analog stick change which move fires within a grapple state. For example, in a Front Strong Grapple, pressing ↑ + A fires slot `front_strong_grapple_3`, while pressing ↓ + B fires slot `front_strong_grapple_8`.
-
-`InputManager.js` reads raw inputs each frame and passes them to `MoveEngine.js`, which checks the current character state (standing, grappling, downed, running, etc.) and resolves which move slot is being requested. `MoveEngine.js` then looks up that slot in the character's `moves.json` and triggers the corresponding animation and damage/effect logic.
-
-### Move Database
-
-Every move in the game is defined in the master move database (`data/moves/Moves.md`) with the following properties:
-
-|Property|Description|
-|---|---|
-|**Power**|Damage tier: F (weakest) → E → D → C → B → A → S (strongest), G for special gag moves|
-|**KO**|Whether this move can cause a knockout|
-|**Bleed**|Whether this move can open a blade job|
-|**Feature**|Special outcome: `Pin` (goes straight to pin attempt), `Submit` (applies a submission hold), or `Null`|
-
-Moves are organized by which slot category they are eligible for — for example, finisher-tier moves like the **Rockbottom**, **Stone Cold Stunner**, and **Pedigree** only appear in the Finisher slot lists.
 
 ---
 
@@ -289,7 +240,7 @@ Every move in the game is defined in the master move database (`data/moves/Moves
 |**Bleed**|Whether this move can open a blade job|
 |**Feature**|Special outcome: `Pin` (goes straight to pin attempt), `Submit` (applies a submission hold), or `Null`|
 
-Moves are organized by which slot category they are eligible for — for example, finisher-tier moves like the **Rockbottom**, **Stone Cold Stunner**, and **Pedigree** only appear in the Finisher slot lists.
+Moves are organized by which slot category they are eligible for — for example, finisher-tier moves only appear in the Finisher slot lists.
 
 ---
 
@@ -339,18 +290,19 @@ Moves are organized by which slot category they are eligible for — for example
 
 No engine code needs to change. The character loader, move engine, and all game systems are entirely data-driven.
 
+---
 
 ## Tech Stack
 
-| Tool                                      | Purpose                                             |
-| ----------------------------------------- | --------------------------------------------------- |
-| [Babylon.js](https://www.babylonjs.com/)  | 3D rendering engine, physics, animation             |
-| [Blockbench](https://www.blockbench.net/) | Character model creation and rigging                |
-| GLB / glTF                                | Character model format                              |
-| JSON                                      | Character data, texture manifests, move assignments |
-| Vanilla JS                                | Game logic (no framework)                           |
+|Tool|Purpose|
+|---|---|
+|[Babylon.js](https://www.babylonjs.com/)|3D rendering engine, physics, animation|
+|[Blockbench](https://www.blockbench.net/)|Character model creation and rigging|
+|GLB / glTF|Character model format|
+|JSON|Character data, texture manifests, move assignments|
+|Vanilla JS|Game logic (no framework)|
 
-
+---
 
 ## 🤝 How to Contribute
 
@@ -365,23 +317,27 @@ We need help from the community to document No Mercy's intricate systems! You ca
 
 **No programming experience required for Phase 1!** If you love No Mercy and want to help preserve its design, you can contribute.
 
-
 ---
 
 ## 🎮 Design Principles
 
 ### Accuracy First
+
 We aim to recreate No Mercy's feel as faithfully as possible. When in doubt, we defer to how No Mercy actually works.
 
 ### No Copyrighted Content
+
 The final game will contain:
+
 - ❌ No WWE/WWF characters, logos, or branding
 - ❌ No licensed music or copyrighted assets
 - ✅ Original characters, arenas, and assets
 - ✅ Full customization through JSON and user-provided media
 
 ### Open and Moddable
+
 Everything is designed to be:
+
 - Human-readable (JSON, not binary formats)
 - Easily customizable (characters, moves, arenas, belts)
 - Community-driven (open contribution model)
@@ -390,9 +346,10 @@ Everything is designed to be:
 
 ## 📜 License
 
-This project is licensed under the GNU General Public License v3.0. See [LICENSE.md](LICENSE.md) for details.
+This project is licensed under the GNU General Public License v3.0. See LICENSE.md for details.
 
 This means:
+
 - ✅ Free to use, modify, and distribute
 - ✅ Must remain open-source
 - ✅ Derivative works must use the same license
@@ -402,8 +359,9 @@ This means:
 ## 🙏 Acknowledgments
 
 This project is inspired by the legendary work of:
-- **AKI Corporation** - Developers of WWF No Mercy, WWF WrestleMania 2000, WCW/nWo Revenge, WCW World Tour, Virtual Pro Wrestling 64, and Virtual Pro Wrestling 2.
-- **The No Mercy modding community** - Years of dedication to this game
+
+- **AKI Corporation** — Developers of WWF No Mercy, WWF WrestleMania 2000, WCW/nWo Revenge, WCW World Tour, Virtual Pro Wrestling 64, and Virtual Pro Wrestling 2
+- **The No Mercy modding community** — Years of dedication to this game
 
 We are not affiliated with WWE, AKI Corporation, or THQ. This is a fan project created out of love for the gameplay mechanics and design principles of No Mercy.
 
