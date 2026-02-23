@@ -1,0 +1,2324 @@
+{
+  "$comment": "Master move database for VPG Engine. Each move lists all eligible slot categories explicitly. For slot category definitions and cascade rules see data/moves/move-slots.md. For power tier scale, feature values, and boolean flag definitions see data/README.md.",
+  "$status": "In progress — front grapple categories complete. Back grapple, ground, turnbuckle, ringside, apron, Irish whip, taunt, and double-team categories to be added.",
+  "moves": [
+
+    {
+      "id": "arm-drag",
+      "name": "Arm Drag",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleA"]
+    },
+    {
+      "id": "chop-01",
+      "name": "Chop 01",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleA"]
+    },
+    {
+      "id": "chop-02",
+      "name": "Chop 02",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleA"]
+    },
+    {
+      "id": "chop-03",
+      "name": "Chop 03",
+      "power": "F",
+      "ko": false,
+      "bleed": true,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleA"]
+    },
+    {
+      "id": "chop-04",
+      "name": "Chop 04",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleA"]
+    },
+    {
+      "id": "club-to-neck",
+      "name": "Club to Neck",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleA"]
+    },
+    {
+      "id": "double-axe-handle",
+      "name": "Double Axe Handle",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleA"]
+    },
+    {
+      "id": "double-leg-takedown",
+      "name": "Double Leg Takedown",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleA"]
+    },
+    {
+      "id": "elbow-strike",
+      "name": "Elbow Strike",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleA"]
+    },
+    {
+      "id": "elbow-to-back-of-head",
+      "name": "Elbow to Back of Head",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleA"]
+    },
+    {
+      "id": "european-uppercut",
+      "name": "European Uppercut",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleA"]
+    },
+    {
+      "id": "eye-rake",
+      "name": "Eye Rake",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleA"]
+    },
+    {
+      "id": "fireman-carry",
+      "name": "Fireman Carry",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleA"]
+    },
+    {
+      "id": "head-butt-01",
+      "name": "Head Butt 01",
+      "power": "F",
+      "ko": false,
+      "bleed": true,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleA"]
+    },
+    {
+      "id": "head-butt-02",
+      "name": "Head Butt 02",
+      "power": "F",
+      "ko": false,
+      "bleed": true,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleA"]
+    },
+    {
+      "id": "head-butt-03",
+      "name": "Head Butt 03",
+      "power": "F",
+      "ko": false,
+      "bleed": true,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleA"]
+    },
+    {
+      "id": "headlock-and-punch",
+      "name": "Headlock and Punch",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleA"]
+    },
+    {
+      "id": "headlock-and-thrust",
+      "name": "Headlock and Thrust",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleA"]
+    },
+    {
+      "id": "jumping-front-kick",
+      "name": "Jumping Front Kick",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleA"]
+    },
+    {
+      "id": "knee-lift",
+      "name": "Knee Lift",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleA"]
+    },
+    {
+      "id": "knee-strike",
+      "name": "Knee Strike",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleA"]
+    },
+    {
+      "id": "knee-sweep",
+      "name": "Knee Sweep",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleA"]
+    },
+    {
+      "id": "mini-shin-kicks",
+      "name": "Mini Shin Kicks",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleA"]
+    },
+    {
+      "id": "one-hand-scoop-slam",
+      "name": "One Hand Scoop Slam",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleA"]
+    },
+    {
+      "id": "overhand-punch",
+      "name": "Overhand Punch",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleA"]
+    },
+    {
+      "id": "scoop-slam",
+      "name": "Scoop Slam",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleA"]
+    },
+    {
+      "id": "slap",
+      "name": "Slap",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleA"]
+    },
+    {
+      "id": "snapmare",
+      "name": "Snapmare",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleA"]
+    },
+    {
+      "id": "throat-thrust",
+      "name": "Throat Thrust",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleA"]
+    },
+    {
+      "id": "underhand-hook-punch",
+      "name": "Underhand Hook Punch",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleA"]
+    },
+
+    // -----------------------------------------------------------------------
+    // FRONT WEAK GRAPPLE B (Slots 5-8)
+    // Cascades to frontStrongGrapple and frontFinisher
+    // -----------------------------------------------------------------------
+
+    {
+      "id": "arm-dragon-screw",
+      "name": "Arm Dragon Screw",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "arm-wrench-elbow-smash",
+      "name": "Arm Wrench / Elbow Smash",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "arm-wrench-with-hook-kick",
+      "name": "Arm Wrench with Hook Kick",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "back-body-flip",
+      "name": "Back Body Flip",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "chop-down",
+      "name": "Chop Down",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "double-underhook-suplex",
+      "name": "Double Underhook Suplex",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "drop-suplex-01",
+      "name": "Drop Suplex 01",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "drop-suplex-02",
+      "name": "Drop Suplex 02",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "fallaway-slam",
+      "name": "Fallaway Slam",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "falling-neck-breaker",
+      "name": "Falling Neck Breaker",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "falling-powerslam",
+      "name": "Falling Powerslam",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "falling-suplex",
+      "name": "Falling Suplex",
+      "power": "D",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "gordbuster-01",
+      "name": "Gordbuster 01",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "gordbuster-02",
+      "name": "Gordbuster 02",
+      "power": "D",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "head-scissor-takedown-01",
+      "name": "Head Scissor Takedown 01",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "head-scissor-takedown-02",
+      "name": "Head Scissor Takedown 02",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "headlock-takedown",
+      "name": "Headlock Takedown",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "hip-throw",
+      "name": "Hip Throw",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "hip-toss",
+      "name": "Hip Toss",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "jawbreaker",
+      "name": "Jawbreaker",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "knee-strikes-01",
+      "name": "Knee Strikes 01",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "knee-strikes-02",
+      "name": "Knee Strikes 02",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "knee-strikes-03",
+      "name": "Knee Strikes 03",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "mini-chops",
+      "name": "Mini Chops",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "neck-breaker-01",
+      "name": "Neck Breaker 01",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "neck-breaker-02",
+      "name": "Neck Breaker 02",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "piledriver-01",
+      "name": "Piledriver 01",
+      "power": "D",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "piledriver-02",
+      "name": "Piledriver 02",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "piledriver-03",
+      "name": "Piledriver 03",
+      "power": "D",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "piledriver-04",
+      "name": "Piledriver 04",
+      "power": "D",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "rib-breaker",
+      "name": "Rib Breaker",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "russian-leg-sweep",
+      "name": "Russian Leg Sweep",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "shoulder-breaker",
+      "name": "Shoulder Breaker",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "shoulder-thrusts",
+      "name": "Shoulder Thrusts",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "snap-suplex",
+      "name": "Snap Suplex",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "stall-suplex",
+      "name": "Stall Suplex",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "suplex",
+      "name": "Suplex",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "tie-up-knee-strikes",
+      "name": "Tie Up Knee Strikes",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "underhook-suplex-knee",
+      "name": "Underhook Suplex / Knee",
+      "power": "D",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontWeakGrappleB", "frontStrongGrapple", "frontFinisher"]
+    },
+
+    // -----------------------------------------------------------------------
+    // FRONT STRONG GRAPPLE
+    // Exclusive to frontStrongGrapple — cascades to frontFinisher
+    // Does not include frontWeakGrappleB moves, which already cascade here
+    // -----------------------------------------------------------------------
+
+    {
+      "id": "backslide-pin",
+      "name": "Backslide Pin",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": "Pin",
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "bearhug",
+      "name": "Bearhug",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": "Submit",
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "belly-to-back-flip-suplex",
+      "name": "Belly to Back Flip Suplex",
+      "power": "C",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "belly-to-back-spin-suplex",
+      "name": "Belly to Back Spin Suplex",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "belly-to-back-suplex",
+      "name": "Belly to Back Suplex",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "belly-to-belly-suplex-01",
+      "name": "Belly to Belly Suplex 01",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "belly-to-belly-suplex-02",
+      "name": "Belly to Belly Suplex 02",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "body-press-drop",
+      "name": "Body Press Drop",
+      "power": "D",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "body-press-to-front-slam",
+      "name": "Body Press to Front Slam",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "brainbuster",
+      "name": "Brainbuster",
+      "power": "B",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "canadian-back-breaker",
+      "name": "Canadian Back Breaker",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": "Submit",
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "capture-suplex",
+      "name": "Capture Suplex",
+      "power": "B",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "chicken-wing-suplex-pin",
+      "name": "Chicken Wing Suplex Pin",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "choke-takedown",
+      "name": "Choke Takedown",
+      "power": "D",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "chokeslam-01",
+      "name": "Chokeslam 01",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "chokeslam-02",
+      "name": "Chokeslam 02",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "chokeslam-from-hell",
+      "name": "Chokeslam from Hell",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "climb-up-wheel-kick",
+      "name": "Climb Up Wheel Kick",
+      "power": "D",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "clinching-slam",
+      "name": "Clinching Slam",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "ddt-01",
+      "name": "DDT 01",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "ddt-02",
+      "name": "DDT 02",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "ddt-03",
+      "name": "DDT 03",
+      "power": "D",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "death-valley-driver",
+      "name": "Death Valley Driver",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "double-arm-ddt",
+      "name": "Double Arm DDT",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "double-chokelift-slam",
+      "name": "Double Chokelift Slam",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "dragon-screw-01",
+      "name": "Dragon Screw 01",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "dragon-screw-02",
+      "name": "Dragon Screw 02",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "falcon-arrow",
+      "name": "Falcon Arrow",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "falling-hip-toss",
+      "name": "Falling Hip Toss",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "fire-thunder-driver",
+      "name": "Fire Thunder Driver",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "fireman-carry-to-pancake",
+      "name": "Fireman Carry to Pancake",
+      "power": "D",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "fisherman-ddt",
+      "name": "Fisherman DDT",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "fisherman-suplex",
+      "name": "Fisherman Suplex",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "front-face-pancake",
+      "name": "Front Face Pancake",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "front-powerslam",
+      "name": "Front Powerslam",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "giant-headbutt",
+      "name": "Giant Headbutt",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "guillotine-choke",
+      "name": "Guillotine Choke",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "headlock",
+      "name": "Headlock",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "hopping-rolling-pin",
+      "name": "Hopping Rolling Pin",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "hopping-sunset-flip-pin",
+      "name": "Hopping Sunset Flip Pin",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "hurracanrana-pin",
+      "name": "Hurracanrana Pin",
+      "power": "D",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "judo-front-slam",
+      "name": "Judo Front Slam",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "knee-smash",
+      "name": "Knee Smash",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "manhattan-drop",
+      "name": "Manhattan Drop",
+      "power": "D",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "michinoku-driver",
+      "name": "Michinoku Driver",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "military-press",
+      "name": "Military Press",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "northern-lights-suplex-01",
+      "name": "Northern Lights Suplex 01",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "northern-lights-suplex-02",
+      "name": "Northern Lights Suplex 02",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "oklahoma-slam",
+      "name": "Oklahoma Slam",
+      "power": "B",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "powerbomb-pin-01",
+      "name": "Powerbomb Pin 01",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "powerbomb-pin-02",
+      "name": "Powerbomb Pin 02",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "powerbomb-pin-03",
+      "name": "Powerbomb Pin 03",
+      "power": "B",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "powerbomb-pin-04",
+      "name": "Powerbomb Pin 04",
+      "power": "B",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "powerbomb-pin-05",
+      "name": "Powerbomb Pin 05",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "powerbomb-pin-06",
+      "name": "Powerbomb Pin 06",
+      "power": "B",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "powerbomb-pin-07",
+      "name": "Powerbomb Pin 07",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "powerbomb-pin-08",
+      "name": "Powerbomb Pin 08",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "powerbomb-pin-09",
+      "name": "Powerbomb Pin 09",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "powerslam",
+      "name": "Powerslam",
+      "power": "D",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "reverse-armbar",
+      "name": "Reverse Armbar",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "reverse-suplex",
+      "name": "Reverse Suplex",
+      "power": "D",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "rolling-leg-lock",
+      "name": "Rolling Leg Lock",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "rope-drop-clothesline",
+      "name": "Rope Drop Clothesline",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "running-knee-strike",
+      "name": "Running Knee Strike",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "running-powerbomb-pin",
+      "name": "Running Powerbomb Pin",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "sambo-suplex",
+      "name": "Sambo Suplex",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "scoop-piledriver",
+      "name": "Scoop Piledriver",
+      "power": "D",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "shoulder-breaker-thrust",
+      "name": "Shoulder Breaker Thrust",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "sidewalk-slam",
+      "name": "Sidewalk Slam",
+      "power": "D",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "small-package",
+      "name": "Small Package",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "snap-powerbomb-01",
+      "name": "Snap Powerbomb 01",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "snap-powerbomb-02",
+      "name": "Snap Powerbomb 02",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "snap-powerbomb-03",
+      "name": "Snap Powerbomb 03",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "somersault-kick",
+      "name": "Somersault Kick",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "spinning-leg-takedown",
+      "name": "Spinning Leg Takedown",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "stalling-brainbuster",
+      "name": "Stalling Brainbuster",
+      "power": "B",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "stalling-piledriver",
+      "name": "Stalling Piledriver",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "standing-armbar",
+      "name": "Standing Armbar",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": "Submit",
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "standing-clothesline",
+      "name": "Standing Clothesline",
+      "power": "D",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "strong-sambo-suplex",
+      "name": "Strong Sambo Suplex",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "super-shoulder-breaker",
+      "name": "Super Shoulder Breaker",
+      "power": "B",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "sweep-with-mounted-punching",
+      "name": "Sweep with Mounted Punching",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": "Submit",
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "t-bone-suplex-01",
+      "name": "T-Bone Suplex 01",
+      "power": "D",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "t-bone-suplex-02",
+      "name": "T-Bone Suplex 02",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "tiger-driver",
+      "name": "Tiger Driver",
+      "power": "D",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "tiger-driver-with-pin",
+      "name": "Tiger Driver with Pin",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": "Pin",
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "tilt-a-whirl-piledriver",
+      "name": "Tilt A Whirl Piledriver",
+      "power": "D",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "trapping-headbutts",
+      "name": "Trapping Headbutts",
+      "power": "E",
+      "ko": false,
+      "bleed": true,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "triple-powerbomb-pin",
+      "name": "Triple Powerbomb Pin",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": "Pin",
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "two-handed-choke-lift",
+      "name": "Two Handed Choke Lift",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": "Submit",
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "underhook-back-breaker",
+      "name": "Underhook Back Breaker",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "underhook-belly-to-belly-suplex-01",
+      "name": "Underhook Belly to Belly Suplex 01",
+      "power": "C",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+    {
+      "id": "underhook-belly-to-belly-suplex-02",
+      "name": "Underhook Belly to Belly Suplex 02",
+      "power": "C",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontStrongGrapple", "frontFinisher"]
+    },
+
+    // -----------------------------------------------------------------------
+    // FRONT FINISHER
+    // Exclusive to frontFinisher — does not appear in any grapple slots
+    // -----------------------------------------------------------------------
+
+    {
+      "id": "3-4-turn-neck-breaker",
+      "name": "3/4 Turn Neck Breaker",
+      "power": "S",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "big-swing",
+      "name": "Big Swing",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "brainbuster-ddt",
+      "name": "Brainbuster DDT",
+      "power": "S",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "burning-combo",
+      "name": "Burning Combo",
+      "power": "S",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "butterfly-lock",
+      "name": "Butterfly Lock",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": "Submit",
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "censor-kick",
+      "name": "Censor Kick",
+      "power": "B",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "chicken-wing-jawbreaker",
+      "name": "Chicken Wing Jawbreaker",
+      "power": "B",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "continuous-powerbomb-death-valley-driver",
+      "name": "Continuous Powerbomb / Death Valley Driver",
+      "power": "S",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "cradle-ddt",
+      "name": "Cradle DDT",
+      "power": "C",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "cross-ddt",
+      "name": "Cross DDT",
+      "power": "A",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "cross-heel-hold",
+      "name": "Cross Heel Hold",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": "Submit",
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "dominator",
+      "name": "Dominator",
+      "power": "S",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "double-dragon-screw-01",
+      "name": "Double Dragon Screw 01",
+      "power": "A",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "double-dragon-screw-02",
+      "name": "Double Dragon Screw 02",
+      "power": "A",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "downward-spiral",
+      "name": "Downward Spiral",
+      "power": "S",
+      "ko": true,
+      "bleed": true,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "emerald-fusion",
+      "name": "Emerald Fusion",
+      "power": "S",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "fameasser",
+      "name": "FameAsser",
+      "power": "S",
+      "ko": true,
+      "bleed": true,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "figure-four-combo-pin",
+      "name": "Figure Four Combo Pin",
+      "power": "D",
+      "ko": false,
+      "bleed": false,
+      "feature": "Pin",
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "fireball",
+      "name": "Fireball",
+      "power": "A",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "fire-thunder",
+      "name": "Fire Thunder",
+      "power": "S",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "flipping-armbar",
+      "name": "Flipping Armbar",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": "Submit",
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "flowing-ddt",
+      "name": "Flowing DDT",
+      "power": "A",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "front-russian-sweep",
+      "name": "Front Russian Sweep",
+      "power": "S",
+      "ko": true,
+      "bleed": true,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "hangmans-ddt",
+      "name": "Hangmans DDT",
+      "power": "S",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "helicopter-pin",
+      "name": "Helicopter Pin",
+      "power": "S",
+      "ko": false,
+      "bleed": false,
+      "feature": "Pin",
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "hip-toss-to-submission",
+      "name": "Hip Toss to Submission",
+      "power": "G",
+      "ko": false,
+      "bleed": false,
+      "feature": "Submit",
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "huge-chokeslam",
+      "name": "Huge Chokeslam",
+      "power": "S",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "insider-edge",
+      "name": "Insider Edge",
+      "power": "S",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "inverted-ddt",
+      "name": "Inverted DDT",
+      "power": "B",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "iron-claw",
+      "name": "Iron Claw",
+      "power": "A",
+      "ko": false,
+      "bleed": true,
+      "feature": "Submit",
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "jack-hammer",
+      "name": "Jack Hammer",
+      "power": "S",
+      "ko": false,
+      "bleed": false,
+      "feature": "Pin",
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "jackknife-powerbomb",
+      "name": "Jackknife Powerbomb",
+      "power": "S",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "jericho-powerbomb",
+      "name": "Jericho Powerbomb",
+      "power": "A",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "jump-swinging-ddt",
+      "name": "Jump Swinging DDT",
+      "power": "S",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "kicking-combination-01",
+      "name": "Kicking Combination 01",
+      "power": "B",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "kicking-combination-02",
+      "name": "Kicking Combination 02",
+      "power": "S",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "kohya-otoshi",
+      "name": "Kohya-Otoshi",
+      "power": "S",
+      "ko": false,
+      "bleed": false,
+      "feature": "Pin",
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "last-ride",
+      "name": "Last Ride",
+      "power": "S",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "leg-sweep-strong-punching",
+      "name": "Leg Sweep / Strong Punching",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": "Submit",
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "linda-slap",
+      "name": "Linda Slap",
+      "power": "B",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "mac-stunner",
+      "name": "Mac Stunner",
+      "power": "S",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "mandible-claw",
+      "name": "Mandible Claw",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": "Submit",
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "mu-ken",
+      "name": "Mu-ken",
+      "power": "A",
+      "ko": false,
+      "bleed": false,
+      "feature": "Pin",
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "old-man-flop",
+      "name": "Old Man Flop",
+      "power": "G",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "olympic-slam",
+      "name": "Olympic Slam",
+      "power": "A",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "orange-crush-pin",
+      "name": "Orange Crush Pin",
+      "power": "S",
+      "ko": false,
+      "bleed": false,
+      "feature": "Pin",
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "pedigree",
+      "name": "Pedigree",
+      "power": "S",
+      "ko": true,
+      "bleed": true,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "poison-mist",
+      "name": "Poison Mist",
+      "power": "D",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "power-clothesline",
+      "name": "Power Clothesline",
+      "power": "S",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "powerbomb-pin-with-slide",
+      "name": "Powerbomb Pin with Slide",
+      "power": "S",
+      "ko": false,
+      "bleed": false,
+      "feature": "Pin",
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "powerbomb-to-facebuster",
+      "name": "Powerbomb to Facebuster",
+      "power": "S",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "punching-combination-01",
+      "name": "Punching Combination 01",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "punching-combination-02",
+      "name": "Punching Combination 02",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "punching-combination-03",
+      "name": "Punching Combination 03",
+      "power": "A",
+      "ko": true,
+      "bleed": true,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "rikishi-driver",
+      "name": "Rikishi Driver",
+      "power": "S",
+      "ko": true,
+      "bleed": true,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "rios-driver",
+      "name": "Rios Driver",
+      "power": "A",
+      "ko": true,
+      "bleed": true,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "rockbottom",
+      "name": "Rockbottom",
+      "power": "A",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "rushing-armbar",
+      "name": "Rushing Armbar",
+      "power": "E",
+      "ko": false,
+      "bleed": false,
+      "feature": "Submit",
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "russian-neck-drop",
+      "name": "Russian Neck Drop",
+      "power": "S",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "scoop-reverse-ddt",
+      "name": "Scoop Reverse DDT",
+      "power": "B",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "screwdriver",
+      "name": "Screwdriver",
+      "power": "S",
+      "ko": true,
+      "bleed": true,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "shake-rattle-and-roll",
+      "name": "Shake Rattle and Roll",
+      "power": "S",
+      "ko": true,
+      "bleed": true,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "sidewalk-slam-with-submission",
+      "name": "Sidewalk Slam with Submission",
+      "power": "G",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "six-seconds-magic",
+      "name": "Six Seconds Magic",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": "Submit",
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "sky-high",
+      "name": "Sky High",
+      "power": "S",
+      "ko": false,
+      "bleed": false,
+      "feature": "Pin",
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "small-package-ddt",
+      "name": "Small Package DDT",
+      "power": "S",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "snowplow",
+      "name": "Snowplow",
+      "power": "A",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "spinning-falcon-arrow",
+      "name": "Spinning Falcon Arrow",
+      "power": "S",
+      "ko": false,
+      "bleed": false,
+      "feature": "Pin",
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "spiral-bomb",
+      "name": "Spiral Bomb",
+      "power": "S",
+      "ko": false,
+      "bleed": false,
+      "feature": "Pin",
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "stephanie-slap",
+      "name": "Stephanie Slap",
+      "power": "B",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "sto-01",
+      "name": "STO 01",
+      "power": "S",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "sto-02",
+      "name": "STO 02",
+      "power": "B",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "stone-cold-stunner",
+      "name": "Stone Cold Stunner",
+      "power": "S",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "striking-combination",
+      "name": "Striking Combination",
+      "power": "A",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "strong-lariat",
+      "name": "Strong Lariat",
+      "power": "S",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "sumo-attack-01",
+      "name": "Sumo Attack 01",
+      "power": "C",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "sumo-attack-02",
+      "name": "Sumo Attack 02",
+      "power": "B",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "super-knee-strike",
+      "name": "Super Knee Strike",
+      "power": "A",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "super-powerbomb-pin-01",
+      "name": "Super Powerbomb Pin 01",
+      "power": "A",
+      "ko": false,
+      "bleed": false,
+      "feature": "Pin",
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "super-powerbomb-pin-02",
+      "name": "Super Powerbomb Pin 02",
+      "power": "S",
+      "ko": false,
+      "bleed": false,
+      "feature": "Pin",
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "super-snap-powerbomb-01",
+      "name": "Super Snap Powerbomb 01",
+      "power": "S",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "super-snap-powerbomb-02",
+      "name": "Super Snap Powerbomb 02",
+      "power": "S",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "sweet-chin-music",
+      "name": "Sweet Chin Music",
+      "power": "A",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "tazzplex",
+      "name": "Tazzplex",
+      "power": "S",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "the-morality-check",
+      "name": "The Morality Check",
+      "power": "D",
+      "ko": false,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "tko",
+      "name": "TKO",
+      "power": "S",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "tombstone-piledriver",
+      "name": "Tombstone Piledriver",
+      "power": "S",
+      "ko": true,
+      "bleed": true,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "twist-of-fate",
+      "name": "Twist of Fate",
+      "power": "A",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "two-handed-chokeslam",
+      "name": "Two Handed Chokeslam",
+      "power": "S",
+      "ko": true,
+      "bleed": false,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "ultimate-armbar",
+      "name": "Ultimate Armbar",
+      "power": "F",
+      "ko": false,
+      "bleed": false,
+      "feature": "Submit",
+      "eligibleSlots": ["frontFinisher"]
+    },
+    {
+      "id": "x-factor",
+      "name": "X-Factor",
+      "power": "S",
+      "ko": true,
+      "bleed": true,
+      "feature": null,
+      "eligibleSlots": ["frontFinisher"]
+    }
+
+    // -----------------------------------------------------------------------
+    // BACK WEAK GRAPPLE
+    // To be added
+    // -----------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------
+    // BACK STRONG GRAPPLE
+    // To be added
+    // -----------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------
+    // BACK FINISHER
+    // To be added
+    // -----------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------
+    // GROUND, TURNBUCKLE, RINGSIDE, APRON, IRISH WHIP, TAUNT, DOUBLE-TEAM
+    // To be added
+    // -----------------------------------------------------------------------
+
+  ]
+}
