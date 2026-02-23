@@ -1,4 +1,3 @@
-
 {
   "Grappling": {
     "Front Grapple": {
@@ -292,264 +291,320 @@
       "Moves": {
         "A (Opponent Facing Player)": "Front Flying Counter Grapple",
         "A (Opponent Facing Away)": "Back Flying Counter Grapple"
-		}
+      }
     },
-	"Flying Attack": {
-	      "Standing Opponent Flying Attack": {
-	        "Opponent State": "Standing in Ring",
-	        "Setup": "D-Pad plus run (C-Down) into turnbuckle, release D-Down to jump off",
-	        "Moves": "Standing Opponent Flying Attack"
-			},
-			"Standing Opponent Flying Attack to Outside": {
-				"Opponent State": "Standing Outside of Ring",
-		        "Setup": "D-Pad plus run (C-Down) into turnbuckle, release D-Down to jump off",
-				"Moves": "Standing Opponent Flying Attack to Outside"
-			},
-			"Standing Opponent Flying Finisher": {
-				"Opponent State": "Standing In or Outside of Ring",
-		        "Setup": "With Special, D-Pad plus run (C-Down) into turnbuckle, release D-Down to jump off",
-				"Moves": "Standing Opponent Flying Finisher"
-			},
-			"Laying Opponent Flying Attack": {
-				"Opponent State": "Laying Down In Ring",
-		        "Setup": "D-Pad plus run (C-Down) into turnbuckle, release D-Down to jump off",
-				"Moves": "Laying Opponent Flying Attack"
-			},
-			"Laying Opponent Flying Attack to Outside": {
-				"Opponent State": "Laying Down Outside of Ring",
-		        "Setup": "D-Pad plus run (C-Down) into turnbuckle, release D-Down to jump off",
-				"Moves": "Laying Opponent Flying Attack to Outside"
-	      },
-	      "Laying Opponent Flying Finisher": {
-				"Opponent State": "Laying Down In or Outside of Ring",
-		        "Setup": "With Special, D-Pad plus run (C-Down) into turnbuckle, release D-Down to jump off",
-				"Moves": "Laying Opponent Flying Finisher"
-			},
-			"Turnbuckle Inside Attack (Bret's Rope Attack)": {
-				"Opponent State": "Laying Down Inside Ring Near Corner",
-				"Setup": "In corner press D-Pad torwards corner while pressing A",
-				"Moves": {
-					"A": "Attack from Second Rope"
-				}
-			}
-		},
-		"Corner Taunt": {
-			"Opponent State": "Any",
-			"Setup": "Stand in corner pressing D-Pad towards turnbuckle plus Control Stick",
-			"Moves": {
-				"Control Stick": "Corner Taunt"
-			}
-		},
-		"Turnbuckle Taunt": {
-			"Opponent State": "Any",
-			"Setup": "From top turnbuckle, before releasing C-Down, taunt with Control Stick",
-			"Moves": "Control Stick": "Top Turnbuckle Taunt"
-		}
-	},
-	"Ringside": {
-		"Grapple to Apron": {
-			"Opponent State": "Standing on Apron",
-			"Setup": "From inside ring, initiate weak or strong grapple to opponent standing on apron",
-			"Moves": {
-			"A or B": "Weak Grapple to Apron",
-			"A or B": "Strong Grapple to Apron",
-			"Control Stick": "Special Grapple to Apron"
-			}
-		},
-		"Counter Grapple from Apron": {
-			"Opponent State": "Grappling player in ring from ring apron",
-			"Setup": "Being grappled by opponent from apron",
-			"Moves": {
-				"Rapidly tapping A and B": "Counter Grapple from Apron"
-			}
-		},
-		"Rope Inside Attack": {
-			"Opponent State": "Laying on mat",
-			"Setup": "Standing between downed opponent and ring ropes",
-			"Moves": {
-				"D-Pad + A": "Rope Inside Attack"
-			}
-		},
-		"Flying Attack to Outside": {
-			"Flying Attack": {
-				"Opponent State": "Outside of ring",
-				"Setup": "Standing inside ring up against ring ropes",
-				"Moves": {
-					"D-Pad + A": "Flying Attack"
-				}
-			},
-			"Running Diving Attack": {
-				"Opponent State": "Outside of ring",
-				"Setup": "Inside ring running torwards ring ropes",
-				"Moves": {
-					"A": "Running Diving Attack 1",
-					"D-Pad + A": "Running Diving Attack 2"
-				}
-			}
-		},
-		"Running Diving Taunt": {
-			"Opponent State": "Outside of ring",
-			"Setup": "Inside ring running torwards ring ropes",
-			"Moves": {
-				"Control Stick": "Running Diving Taunt"
-			}
-		},
-		"Rebound Flying Attack": {
-			"Opponent State": "Standing",
-			"Setup": "Inside ring running torwards ring ropes",
-			"Moves": {
-				"A": "Rebound Flying Attack"
-			}
-		}
-	},
-	"Apron": {
-		"Apron Attack": {
-			"Apron Strike to Inside": {
-				"Opponent State": "Standing inside of ring",
-				"Setup": "Standing on ring apron",
-				"Moves": {
-					"B": "Apron Strike to Inside"
-				}
-			},
-			"Apron Strike to Outside": {
-				"Opponent State": "Standing outside of ring",
-				"Setup": "Standing on ring apron",
-				"Moves": {
-					"B": "Apron Strike to Outside"
-				}
-			},
-		},
-		"Grapple From Apron": {
-			"Opponent State": "Standing inside ring near ropes",
-			"Setup": "Initiate weak or strong grapple to opponent in ring while standing on ring apron",
-			"Moves": {
-				"A or B": "Weak Grapple from Apron",
-				"A or B": "Strong Grapple from Apron",
-				"Control Stick": "Finisher from Apron"
-			}
-		},
-		"Counter Grapple from Apron": {
-			"Opponent State": "Grapping player on ring apron while Standing inside ring",
-			"Setup": "Being grappled by opponent while standing on ring apron",
-			"Moves": {
-				"Rapidly Tapping A and B": "Counter Grapple from Apron"
-			}
-		},		
-		"Flying Attack from Apron": {
-			"Flying Attack": {
-				"Opponent State": "Outside of ring",
-				"Setup": "Standing on ring apron",
-				"Moves": {
-					"D-Pad + A": "Flying Attack"
-				}
-			},
-			"Running Flying Attack": {
-				"Opponent State": "Outside of ring",
-				"Setup": "Running on ring apron",
-				"Moves": {
-					"A": "Running Flying Attack"
-				}
-			},
-		},
-		"Flying Attack to Ring": {
-			"Opponent State": "Inside Ring",
-			"Setup": "Standing on Ring Apron",
-			"Moves": {
-				"A": "Flying Attack (Standing Opponent)",
-				"A": "Flying Attack (Laying Opponent)",
-				"A": "Flying Attack (Special)"
-			}
-		},
-		"Apron Taunt": {
-			"Opponent State": "Any",
-			"Setup": "Standing on ring apron",
-			"Moves": {
-				"Control Stick": "Apron Taunt"
-			}
-		}
-	},
-	"Irish Whip": {
-		"Irish Whip Attack (Strike)": {
-			"Opponent State": "Running Torwards Opponent",
-			"Setup": "Standing",
-			"Moves": {
-				"B": "Irish Whip Attack"
-			}
-		},
-		"Irish Whip Grapple": {
-			"Irish Whip Grapple (Weak)": {
-				"Opponent State": "Irish-whipped from weak grapple, running torwards player",
-				"Setup": "Standing, opponent running torwards player",
-				"Moves": {
-					"Tap A": "Weak Irish-Whip Grapple 1",
-					"Hold A": "Weak Irish-Whip Grapple 2"
-				}
-			},
-			"Irish Whip Grapple (Strong)": {
-				"Opponent State": "Irish-whipped from strong grapple, running torwards player",
-				"Setup": "Standing, opponent running torwards player",
-				"Moves": {
-					"Tap A": "Strong Irish-Whip Grapple 1",
-					"Hold A": "Strong Irish-Whip Grapple 2",
-					"Control Stick": "Irish-Whip Finisher"
-				}
-			}
-		},
-	"Taunt": {
-		"Taunt": {
-			"Opponent State": "Any",
-			"Setup": "Standing",
-			"Moves": {
-				"Control Stick Up": "Standing Taunt 1",
-				"Conrtol Stick Left": "Standing Taunt 2",
-				"Control Stick Right": "Standing Taunt 3"
-			}
-		},
-		"Special Taunt": {
-			"Opponent State": "Any",
-			"Setup": "Standing, has special",
-			"Moves": {
-				"Control Stick": "Special Taunt"		
-		},
-		"Ducking Taunt": {
-			"Opponent State": "Any",
-			"Setup": "Standing or ducking",
-			"Moves": {
-				"Control Stick Down": "Ducking Taunt"
-			}
-		},
-		"Celebration Taunt": {
-			"Opponent State": "Defeated, match over",
-			"Setup": "Win match",
-			"Moves": "Celebration Taunt"
-		},
-		"Entry Way Taunt": {
-			"Opponent State": "n/a",
-			"Setup": "Player's character making way to ring",
-			"Moves": "Entry Way Taunt"		
-		}
-	},
-	"Double-Team": {
-		"Double-Team Grapple": {
-			"Standing Double Team Grapple": {
-				"Opponent State": "Standing",
-				"Setup": "Player and another character grapple opponent at same time from front, back, or sandwich position",
-				"Moves": {
-					"A": ["Front Double-Team Grapple", "Back Double-Team Grapple", "Sandwich Double-Team Grapple"]
-				}
-			},
-			"Running Double-Team Grapple": {
-				"Opponent State": "Running torwards player and another opponent",
-				"Setup": "Standing",
-				"Moves": {
-					"A": "Running Double-Team Grapple"
-				}
-			}
-		},
-		"Double Team Flying Attack": {
-			"Opponent State": "Held up on the shoulders of an opponent",
-			"Setup": "To hold opponent up on shoulders, grapple and C-Up.  When Opponent on shoulders of other player, execute top-rope Flying Attack or Flying Attack from Apron",
-			"Moves": ["From Top Rope Into Ring", "From Top Rope Outside", "From Apron"]
-		}
-	}
+    "Flying Attack": {
+      "Standing Opponent Flying Attack": {
+        "Opponent State": "Standing in Ring",
+        "Setup": "D-Pad plus run (C-Down) into turnbuckle, release C-Down to jump off",
+        "Moves": {
+          "Release C-Down": "Standing Opponent Flying Attack"
+        }
+      },
+      "Standing Opponent Flying Attack to Outside": {
+        "Opponent State": "Standing Outside of Ring",
+        "Setup": "D-Pad plus run (C-Down) into turnbuckle, release C-Down to jump off",
+        "Moves": {
+          "Release C-Down": "Standing Opponent Flying Attack to Outside"
+        }
+      },
+      "Standing Opponent Flying Finisher": {
+        "Opponent State": "Standing In or Outside of Ring",
+        "Setup": "With Special, D-Pad plus run (C-Down) into turnbuckle, release C-Down to jump off",
+        "Moves": {
+          "Release C-Down (With Special)": "Standing Opponent Flying Finisher"
+        }
+      },
+      "Laying Opponent Flying Attack": {
+        "Opponent State": "Laying Down In Ring",
+        "Setup": "D-Pad plus run (C-Down) into turnbuckle, release C-Down to jump off",
+        "Moves": {
+          "Release C-Down": "Laying Opponent Flying Attack"
+        }
+      },
+      "Laying Opponent Flying Attack to Outside": {
+        "Opponent State": "Laying Down Outside of Ring",
+        "Setup": "D-Pad plus run (C-Down) into turnbuckle, release C-Down to jump off",
+        "Moves": {
+          "Release C-Down": "Laying Opponent Flying Attack to Outside"
+        }
+      },
+      "Laying Opponent Flying Finisher": {
+        "Opponent State": "Laying Down In or Outside of Ring",
+        "Setup": "With Special, D-Pad plus run (C-Down) into turnbuckle, release C-Down to jump off",
+        "Moves": {
+          "Release C-Down (With Special)": "Laying Opponent Flying Finisher"
+        }
+      },
+      "Turnbuckle Inside Attack (Bret's Rope Attack)": {
+        "Opponent State": "Laying Down Inside Ring Near Corner",
+        "Setup": "In corner press D-Pad towards corner while pressing A",
+        "Moves": {
+          "A": "Attack from Second Rope"
+        }
+      }
+    },
+    "Corner Taunt": {
+      "Opponent State": "Any",
+      "Setup": "Stand in corner pressing D-Pad towards turnbuckle plus Control Stick",
+      "Moves": {
+        "Control Stick": "Corner Taunt"
+      }
+    },
+    "Turnbuckle Taunt": {
+      "Opponent State": "Any",
+      "Setup": "From top turnbuckle, before releasing C-Down, taunt with Control Stick",
+      "Moves": {
+        "Control Stick": "Top Turnbuckle Taunt"
+      }
+    }
+  },
+  "Ringside": {
+    "Grapple to Apron": {
+      "Weak Grapple to Apron": {
+        "Opponent State": "Standing on Apron",
+        "Setup": "From inside ring, initiate weak grapple to opponent standing on apron",
+        "Moves": {
+          "A or B": "Weak Grapple to Apron"
+        }
+      },
+      "Strong Grapple to Apron": {
+        "Opponent State": "Standing on Apron",
+        "Setup": "From inside ring, initiate strong grapple to opponent standing on apron",
+        "Moves": {
+          "A or B": "Strong Grapple to Apron",
+          "Control Stick": "Special Grapple to Apron"
+        }
+      }
+    },
+    "Counter Grapple from Apron": {
+      "Opponent State": "Grappling player in ring from ring apron",
+      "Setup": "Being grappled by opponent from apron",
+      "Moves": {
+        "Rapidly tapping A and B": "Counter Grapple from Apron"
+      }
+    },
+    "Rope Inside Attack": {
+      "Opponent State": "Laying on mat",
+      "Setup": "Standing between downed opponent and ring ropes",
+      "Moves": {
+        "D-Pad + A": "Rope Inside Attack"
+      }
+    },
+    "Flying Attack to Outside": {
+      "Flying Attack": {
+        "Opponent State": "Outside of ring",
+        "Setup": "Standing inside ring up against ring ropes",
+        "Moves": {
+          "D-Pad + A": "Flying Attack"
+        }
+      },
+      "Running Diving Attack": {
+        "Opponent State": "Outside of ring",
+        "Setup": "Inside ring running towards ring ropes",
+        "Moves": {
+          "A": "Running Diving Attack 1",
+          "D-Pad + A": "Running Diving Attack 2"
+        }
+      }
+    },
+    "Running Diving Taunt": {
+      "Opponent State": "Outside of ring",
+      "Setup": "Inside ring running towards ring ropes",
+      "Moves": {
+        "Control Stick": "Running Diving Taunt"
+      }
+    },
+    "Rebound Flying Attack": {
+      "Opponent State": "Standing",
+      "Setup": "Inside ring running towards ring ropes",
+      "Moves": {
+        "A": "Rebound Flying Attack"
+      }
+    }
+  },
+  "Apron": {
+    "Apron Attack": {
+      "Apron Strike to Inside": {
+        "Opponent State": "Standing inside of ring",
+        "Setup": "Standing on ring apron",
+        "Moves": {
+          "B": "Apron Strike to Inside"
+        }
+      },
+      "Apron Strike to Outside": {
+        "Opponent State": "Standing outside of ring",
+        "Setup": "Standing on ring apron",
+        "Moves": {
+          "B": "Apron Strike to Outside"
+        }
+      }
+    },
+    "Grapple From Apron": {
+      "Weak Grapple from Apron": {
+        "Opponent State": "Standing inside ring near ropes",
+        "Setup": "Initiate weak grapple to opponent in ring while standing on ring apron",
+        "Moves": {
+          "A or B": "Weak Grapple from Apron"
+        }
+      },
+      "Strong Grapple from Apron": {
+        "Opponent State": "Standing inside ring near ropes",
+        "Setup": "Initiate strong grapple to opponent in ring while standing on ring apron",
+        "Moves": {
+          "A or B": "Strong Grapple from Apron",
+          "Control Stick": "Finisher from Apron"
+        }
+      }
+    },
+    "Counter Grapple from Apron": {
+      "Opponent State": "Grappling player on ring apron while standing inside ring",
+      "Setup": "Being grappled by opponent while standing on ring apron",
+      "Moves": {
+        "Rapidly Tapping A and B": "Counter Grapple from Apron"
+      }
+    },
+    "Flying Attack from Apron": {
+      "Flying Attack": {
+        "Opponent State": "Outside of ring",
+        "Setup": "Standing on ring apron",
+        "Moves": {
+          "D-Pad + A": "Flying Attack"
+        }
+      },
+      "Running Flying Attack": {
+        "Opponent State": "Outside of ring",
+        "Setup": "Running on ring apron",
+        "Moves": {
+          "A": "Running Flying Attack"
+        }
+      }
+    },
+    "Flying Attack to Ring": {
+      "Flying Attack to Ring (Standing Opponent)": {
+        "Opponent State": "Standing Inside Ring",
+        "Setup": "Standing on Ring Apron",
+        "Moves": {
+          "A": "Flying Attack (Standing Opponent)"
+        }
+      },
+      "Flying Attack to Ring (Laying Opponent)": {
+        "Opponent State": "Laying Inside Ring",
+        "Setup": "Standing on Ring Apron",
+        "Moves": {
+          "A": "Flying Attack (Laying Opponent)"
+        }
+      },
+      "Flying Attack to Ring (Special)": {
+        "Opponent State": "Standing or Laying Inside Ring",
+        "Setup": "Standing on Ring Apron, with Special",
+        "Moves": {
+          "A (With Special)": "Flying Attack (Special)"
+        }
+      }
+    },
+    "Apron Taunt": {
+      "Opponent State": "Any",
+      "Setup": "Standing on ring apron",
+      "Moves": {
+        "Control Stick": "Apron Taunt"
+      }
+    }
+  },
+  "Irish Whip": {
+    "Irish Whip Attack (Strike)": {
+      "Opponent State": "Running Towards Opponent",
+      "Setup": "Standing",
+      "Moves": {
+        "B": "Irish Whip Attack"
+      }
+    },
+    "Irish Whip Grapple": {
+      "Irish Whip Grapple (Weak)": {
+        "Opponent State": "Irish-whipped from weak grapple, running towards player",
+        "Setup": "Standing, opponent running towards player",
+        "Moves": {
+          "Tap A": "Weak Irish-Whip Grapple 1",
+          "Hold A": "Weak Irish-Whip Grapple 2"
+        }
+      },
+      "Irish Whip Grapple (Strong)": {
+        "Opponent State": "Irish-whipped from strong grapple, running towards player",
+        "Setup": "Standing, opponent running towards player",
+        "Moves": {
+          "Tap A": "Strong Irish-Whip Grapple 1",
+          "Hold A": "Strong Irish-Whip Grapple 2",
+          "Control Stick": "Irish-Whip Finisher"
+        }
+      }
+    }
+  },
+  "Taunt": {
+    "Taunt": {
+      "Opponent State": "Any",
+      "Setup": "Standing",
+      "Moves": {
+        "Control Stick Up": "Standing Taunt 1",
+        "Control Stick Left": "Standing Taunt 2",
+        "Control Stick Right": "Standing Taunt 3"
+      }
+    },
+    "Special Taunt": {
+      "Opponent State": "Any",
+      "Setup": "Standing, has special",
+      "Moves": {
+        "Control Stick": "Special Taunt"
+      }
+    },
+    "Ducking Taunt": {
+      "Opponent State": "Any",
+      "Setup": "Standing or ducking",
+      "Moves": {
+        "Control Stick Down": "Ducking Taunt"
+      }
+    },
+    "Celebration Taunt": {
+      "Opponent State": "Defeated, match over",
+      "Setup": "Win match",
+      "Moves": {
+        "Automatic": "Celebration Taunt"
+      }
+    },
+    "Entry Way Taunt": {
+      "Opponent State": "n/a",
+      "Setup": "Player's character making way to ring",
+      "Moves": {
+        "Automatic": "Entry Way Taunt"
+      }
+    }
+  },
+  "Double-Team": {
+    "Double-Team Grapple": {
+      "Standing Double Team Grapple": {
+        "Opponent State": "Standing",
+        "Setup": "Player and another character grapple opponent at same time from front, back, or sandwich position",
+        "Moves": {
+          "A (Front)": "Front Double-Team Grapple",
+          "A (Back)": "Back Double-Team Grapple",
+          "A (Sandwich)": "Sandwich Double-Team Grapple"
+        }
+      },
+      "Running Double-Team Grapple": {
+        "Opponent State": "Running towards player and another opponent",
+        "Setup": "Standing",
+        "Moves": {
+          "A": "Running Double-Team Grapple"
+        }
+      }
+    },
+    "Double Team Flying Attack": {
+      "Opponent State": "Held up on the shoulders of an opponent",
+      "Setup": "To hold opponent up on shoulders, grapple and C-Up. When opponent on shoulders of other player, execute top-rope Flying Attack or Flying Attack from Apron",
+      "Moves": {
+        "From Top Rope Into Ring": "Double Team Flying Attack (Top Rope)",
+        "From Top Rope Outside": "Double Team Flying Attack (Top Rope to Outside)",
+        "From Apron": "Double Team Flying Attack (Apron)"
+      }
+    }
+  }
 }
