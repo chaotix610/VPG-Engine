@@ -1,0 +1,1412 @@
+# VPG Engine — Hierarchical Finite State Machine Blueprint
+
+## Combat Systems Architecture — Formal Specification
+
+---
+
+## 1. TOP-LEVEL STATE REGIONS
+
+The character controller is decomposed into four concurrent regions. Two are **exclusive** (only one child state active at a time). Two are **orthogonal** (always ticking in parallel with the exclusive regions).
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    CHARACTER ROOT                        │
+│                                                         │
+│  ┌──────────────────────┐  ┌─────────────────────────┐  │
+│  │   ACTION REGION      │  │   SPIRIT METER REGION   │  │
+│  │   (exclusive)        │  │   (orthogonal)          │  │
+│  │                      │  │                         │  │
+│  │  The primary FSM.    │  │  Tracks momentum value, │  │
+│  │  Governs what the    │  │  spirit tier, Special   │  │
+│  │  character is doing  │  │  activation, and decay. │  │
+│  │  at any given frame. │  │  Reads events from      │  │
+│  │                      │  │  Action region.         │  │
+│  │  One active state    │  │  Never blocks or gates  │  │
+│  │  at all times.       │  │  Action transitions     │  │
+│  │                      │  │  directly — only        │  │
+│  │                      │  │  exposes queryable      │  │
+│  │                      │  │  flags.                 │  │
+│  └──────────────────────┘  └─────────────────────────┘  │
+│                                                         │
+│  ┌──────────────────────┐  ┌─────────────────────────┐  │
+│  │   BODY DAMAGE REGION │  │   INTERACTION REGION    │  │
+│  │   (orthogonal)       │  │   (exclusive)           │  │
+│  │                      │  │                         │  │
+│  │  Per-body-part HP    │  │  Manages paired states  │  │
+│  │  tracking. Receives  │  │  between two characters │  │
+│  │  damage events from  │  │  during grapple locks,  │  │
+│  │  Action region.      │  │  pins, submissions.     │  │
+│  │  Feeds thresholds    │  │  Owns the "who is       │  │
+│  │  back (KO eligible,  │  │  attacker / defender"   │  │
+│  │  bleed triggered,    │  │  relationship.          │  │
+│  │  limping, etc).      │  │                         │  │
+│  │                      │  │  Idle when character is │  │
+│  │                      │  │  acting solo.           │  │
+│  └──────────────────────┘  └─────────────────────────┘  │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+```
+
+### Region Classification
+
+| Region | Type | Justification |
+|--------|------|---------------|
+| **Action** | Exclusive | A character does exactly one thing per frame: idle, moving, striking, grappling, downed, rising, etc. Mutual exclusion enforced by the FSM itself. |
+| **Spirit Meter** | Orthogonal | Momentum accumulates and decays regardless of current action. Must tick every frame independently. Not a "state" the character is "in" — it is a continuous resource with thresholds. |
+| **Body Damage** | Orthogonal | Damage to head, body, arms, legs tracks independently of what the character is doing. A character can be in Idle with 80% head damage. This is persistent data, not a behavioral state. |
+| **Interaction** | Exclusive | When two characters are locked together (grapple hold, pin, submission), a shared interaction context exists. Exactly one interaction or none. This region is dormant during solo action. |
+
+### Why This Decomposition
+
+The AKI engine runs on a model where the spirit meter, body damage, and the action state machine are all independent systems that feed data to each other but never share ownership of transitions. A grapple doesn't "live inside" the spirit meter. The spirit meter doesn't "own" the finisher execution. They communicate through event dispatch and flag queries. This decomposition preserves that.
+
+---
+
+## 2. PRIMARY STATE TREE
+
+### Action Region (Exclusive FSM)
+
+```
+Action
+│
+├── Neutral
+│   ├── Idle                          // Standing, no input, ready
+│   ├── Walking                       // D-Pad held, slow movement
+│   ├── Running                       // C-Down held, fast movement
+│   └── Blocking                      // R held while stationary facing opponent
+│
+├── Striking
+│   ├── WeakArmStrike                 // Tap B, close range
+│   ├── WeakLegStrike                 // Tap B, far range
+│   ├── StrongStrike                  // Hold B or A+B
+│   ├── RunningStrike                 // Run + B variants
+│   └── CounterStrike                 // Triggered from perfect block or kick counter
+│
+├── GrappleInitiation
+│   │   // Transient state: proximity+facing check, resolves to
+│   │   // GrappleHold or rejection within 1-3 frames
+│   ├── AttemptingFront               // Tap/Hold A facing opponent front
+│   ├── AttemptingBack                // Tap/Hold A facing opponent back
+│   ├── AttemptingRunning             // Run + A near opponent
+│   └── AttemptingTurnbuckle          // A near opponent in corner
+│
+├── GrappleHold
+│   │   // Both wrestlers locked. Attacker awaits directional input.
+│   │   // Defender's reversal window is active.
+│   ├── FrontWeakHold                 // Tap A connected, front
+│   ├── FrontStrongHold               // Hold A connected, front
+│   ├── BackWeakHold                  // Tap A connected, back
+│   ├── BackStrongHold                // Hold A connected, back
+│   ├── TurnbuckleFrontWeakHold       // Tap A, opponent in corner facing out
+│   ├── TurnbuckleFrontStrongHold     // Hold A, opponent in corner facing out
+│   ├── TurnbuckleBackWeakHold        // Tap A, opponent in corner facing in
+│   ├── TurnbuckleBackStrongHold      // Hold A, opponent in corner facing in
+│   ├── ApronWeakHold                 // Weak grapple across ropes
+│   ├── ApronStrongHold               // Strong grapple across ropes
+│   └── IrishWhipHold                 // Opponent returning from whip, grapple catch
+│
+├── ExecutingMove
+│   │   // Active move playback. Frame counter ticking.
+│   │   // No input accepted from executing character.
+│   │   // Receiver is in ReceivingMove or transitioning to Downed.
+│   ├── AttackerExecuting             // Dealing the move
+│   └── DefenderReceiving             // Taking the move (mirror state)
+│
+├── IrishWhip
+│   ├── Whipping                      // Attacker throwing opponent to ropes
+│   ├── BeingWhipped                  // Defender forced toward ropes
+│   ├── Rebounding                    // Defender bouncing off ropes, returning
+│   └── WhipFollowUp                  // Attacker awaiting returning opponent
+│
+├── Downed
+│   ├── Falling                       // In the air / transition to ground
+│   ├── ProneFaceUp                   // Lying on back
+│   ├── ProneFaceDown                 // Lying on stomach
+│   ├── SittingUp                     // Seated, legs forward
+│   ├── SittingDown                   // On all fours
+│   ├── CornerSlump                   // Slumped in turnbuckle (tree of woe possible)
+│   ├── TreeOfWoe                     // Inverted in corner
+│   └── ApronDowned                   // Lying on ring apron
+│
+├── Rising
+│   ├── GettingUp                     // Standard rise animation
+│   ├── RecoveringAttack              // R held during rise → ducking attack ready
+│   └── KipUp                         // Fast rise (high spirit threshold)
+│
+├── Grounded Interaction (attacker-side states)
+│   ├── GroundGrapple                 // A pressed near downed opponent
+│   │   ├── UpperBodyGrapple          // Near head
+│   │   └── LowerBodyGrapple          // Near feet
+│   ├── GroundStrike                  // B pressed near downed opponent
+│   ├── RunningGroundAttack           // Run + B over downed opponent
+│   └── PickUp                        // Pulling opponent to standing
+│
+├── PinAttempt
+│   ├── Pinning                       // Attacker covering
+│   ├── BeingPinned                   // Defender under cover
+│   └── KickOut                       // Defender escaping (success)
+│
+├── SubmissionAttempt
+│   ├── ApplyingHold                  // Attacker locked in
+│   ├── InSubmission                  // Defender struggling
+│   └── EscapeSubmission              // Defender escaped
+│
+├── Aerial
+│   ├── ClimbingTurnbuckle            // Moving to top rope
+│   ├── OnTopRope                     // Perched, awaiting input
+│   ├── FlyingAttack                  // Launched from top rope
+│   └── FlyingAttackMiss              // Missed / countered mid-air
+│
+├── Ringside
+│   ├── OnApron                       // Standing on ring apron
+│   ├── ExitingRing                   // Transitioning outside
+│   ├── OutsideRing                   // Standing at ringside
+│   ├── DivingToOutside               // Flying over ropes
+│   └── ReenteringRing                // Climbing back in
+│
+├── DoubleTeam
+│   ├── CoopGrapple                   // Synchronized team grapple
+│   └── CoopFlyingSetup               // Partner holding opponent for aerial
+│
+├── Stunned
+│   ├── Dazed                         // Hit stun, standing but unable to act
+│   ├── Staggering                    // Reeling from heavy hit
+│   ├── BalanceStruggle               // Edge/ledge windmill
+│   └── BarricadeLean                 // Back against barricade, dazed
+│
+├── Reversal
+│   ├── GrappleReversal               // Successfully countered a grapple
+│   ├── StrikeReversal                // Perfect block → counter
+│   └── PositionEscape                // Escaped pin or submission
+│
+├── Taunt
+│   ├── StandingTaunt                 // Slots 1-3 (control stick directions)
+│   ├── SpecialTaunt                  // With Special active
+│   ├── DuckingTaunt                  // Control stick down
+│   ├── CornerTaunt                   // On turnbuckle
+│   └── CelebrationTaunt              // Post-match
+│
+└── Entrance
+    └── EntryWay                      // Walking to ring, automatic taunt
+```
+
+### Spirit Meter Region (Orthogonal)
+
+```
+SpiritMeter
+├── Cold                              // Lowest tier, high reversal vulnerability
+├── Cool                              // Below neutral
+├── Neutral                           // Default start
+├── Warm                              // Building momentum
+├── Hot                               // Near Special threshold
+├── Special                           // Special mode active, finishers available
+└── Danger                            // Critical low spirit, KO vulnerable
+```
+
+### Body Damage Region (Orthogonal)
+
+```
+BodyDamage
+├── Head     { hp: 0-255, bleedActive: bool }
+├── Body     { hp: 0-255 }
+├── ArmLeft  { hp: 0-255 }
+├── ArmRight { hp: 0-255 }
+├── LegLeft  { hp: 0-255 }
+└── LegRight { hp: 0-255 }
+```
+
+Not a state machine. A flat data store with threshold-based event emission (e.g., `HEAD_KO_ELIGIBLE`, `LEG_LIMPING`).
+
+### Interaction Region (Exclusive)
+
+```
+Interaction
+├── None                              // No paired interaction
+├── GrappleLock                       // Two characters in hold
+│   ├── attackerCharId
+│   ├── defenderCharId
+│   ├── holdType (frontWeak, frontStrong, backWeak, backStrong, ...)
+│   ├── frameCounter
+│   └── reversalWindowActive: bool
+├── PinLock                           // Pin attempt
+│   ├── pinnerCharId
+│   ├── pinnedCharId
+│   ├── count (0, 1, 2, 3)
+│   └── kickoutDifficulty
+├── SubmissionLock                    // Submission hold
+│   ├── attackerCharId
+│   ├── defenderCharId
+│   ├── holdStrength
+│   └── escapeProgress
+└── IrishWhipLock                     // Whip in progress
+    ├── whipperCharId
+    ├── whippedCharId
+    └── targetVector
+```
+
+### Structural Justification
+
+**GrappleHold as a dedicated branch (not nested under Striking or a generic "Combat"):** Grapple holds are a distinct behavioral regime. Both characters are locked, input interpretation changes completely (direction + button → slot lookup), and a reversal window ticks down. This is not a variant of striking — it is a parallel combat system.
+
+**Downed as a peer of Neutral, not a child:** A downed character has a completely different input contract (no grapples, no strikes, only get-up or wait for opponent interaction). Nesting it under Neutral would pollute Neutral's guard logic.
+
+**Stunned as separate from Downed:** Stunned (dazed, staggering, barricade lean, balance struggle) is standing but input-suppressed. Downed is on the mat. They have different available opponent interactions and different exit conditions.
+
+**Aerial as its own branch:** Climbing, perching, and launching are a distinct mode with unique inputs and unique failure states (missed flying attack). It is not a grapple. It is not a strike. It is its own system.
+
+**Reversal as a transient state:** Reversal executes for a fixed number of frames and then returns to Neutral. It is the output of a successful defensive action, not a persistent mode.
+
+---
+
+## 3. STATE RESPONSIBILITY RULES
+
+### Neutral
+
+| Aspect | Detail |
+|--------|--------|
+| **Logic here** | Movement vector calculation, facing update, proximity checks for grapple range, input polling for A/B/R/C-Down/Control Stick, block state toggle |
+| **Logic NOT here** | Damage application, move execution, spirit meter updates |
+| **Entry events** | `MOVE_COMPLETE`, `RISING_COMPLETE`, `REVERSAL_COMPLETE`, `TAUNT_COMPLETE`, `MATCH_START` |
+| **Exit events** | `GRAPPLE_ATTEMPT` → GrappleInitiation, `STRIKE_INPUT` → Striking, `HIT_RECEIVED` → Stunned/Downed, `RUN_INPUT` → Running, `TAUNT_INPUT` → Taunt |
+| **Guards** | Cannot transition to GrappleInitiation if already in hit stun. Cannot transition to Running if cornered against ropes with no room. |
+
+### Striking
+
+| Aspect | Detail |
+|--------|--------|
+| **Logic here** | Strike type resolution (arm vs leg based on distance, weak vs strong based on hold duration), hitbox activation on defined frame, hit evaluation against defender state |
+| **Logic NOT here** | Grapple slot lookup, spirit tier management, ground interaction |
+| **Entry events** | `STRIKE_INPUT` from Neutral or Running |
+| **Exit events** | `STRIKE_COMPLETE` → Neutral, `STRIKE_BLOCKED` → Neutral (attacker stagger), `STRIKE_REVERSED` → Stunned (attacker becomes defender) |
+| **Guards** | Cannot initiate strong strike if opponent is in iframes (rising invincibility). Running strikes only valid from Running substate. |
+
+### GrappleInitiation
+
+| Aspect | Detail |
+|--------|--------|
+| **Logic here** | Proximity gate check (are characters within grapple range?), facing gate check (front or back?), hold duration measurement (tap vs hold A), result: success → GrappleHold, fail → whiff animation → Neutral |
+| **Logic NOT here** | Move slot resolution (that happens in GrappleHold), damage, spirit changes |
+| **Entry events** | `GRAPPLE_ATTEMPT` with proximity + facing passing guard |
+| **Exit events** | `GRAPPLE_CONNECTED` → GrappleHold, `GRAPPLE_WHIFFED` → Neutral (short recovery), `GRAPPLE_EVADED` → Neutral (opponent dodged) |
+| **Guards** | Target must be in a grappable state (Neutral.Idle, Neutral.Walking, Stunned.Dazed, Stunned.BarricadeLean). Target must NOT be: Downed, Rising, already in GrappleHold, in ExecutingMove, in iframes. Proximity must be ≤ `GRAPPLE_RANGE` constant. |
+
+### GrappleHold
+
+| Aspect | Detail |
+|--------|--------|
+| **Logic here** | Hold type classification (front/back × weak/strong × position context), input window countdown (attacker has N frames to input direction+button), slot resolution on input (direction + button → slot ID), reversal window for defender (polled each frame), hold timeout (no input → grapple breaks), L-button position switch (front↔back, limited count), R-button grapple break |
+| **Logic NOT here** | Move execution (that happens in ExecutingMove after slot resolves), damage application |
+| **Entry events** | `GRAPPLE_CONNECTED` from GrappleInitiation |
+| **Exit events** | `SLOT_RESOLVED` → ExecutingMove, `HOLD_TIMEOUT` → Neutral (both), `GRAPPLE_REVERSED` → Reversal (defender) + Stunned (attacker), `HOLD_BROKEN` → Neutral (both), `POSITION_SWITCHED` → re-enter GrappleHold with flipped front/back |
+| **Guards** | Finisher slot only resolves if SpiritMeter.isSpecialActive() is true for attacker. Position switch limited to max N times per hold. Cannot switch while reversal window is resolving. |
+
+### ExecutingMove
+
+| Aspect | Detail |
+|--------|--------|
+| **Logic here** | Frame counter tick against `move.totalFrames` from JSON, hit evaluation on `move.impactFrame`, damage dispatch to BodyDamage region on impact, KO/bleed evaluation against BodyDamage thresholds, feature evaluation (Pin → PinAttempt, Submit → SubmissionAttempt), spirit meter events (attacker gains, defender loses/gains based on move and spirit system rules) |
+| **Logic NOT here** | Input polling (locked out during execution), animation control (presentation layer syncs to frame counter), grapple initiation |
+| **Entry events** | `SLOT_RESOLVED` from GrappleHold, or `STRIKE_EXECUTING` from Striking |
+| **Exit events** | `MOVE_COMPLETE` → Neutral (attacker) + Downed/Stunned (defender based on move properties), `MOVE_PIN` → PinAttempt, `MOVE_SUBMIT` → SubmissionAttempt |
+| **Guards** | Cannot be entered without a valid move ID. Frame counter must not exceed `move.totalFrames`. |
+
+### IrishWhip
+
+| Aspect | Detail |
+|--------|--------|
+| **Logic here** | Whip direction vector, rope bounce physics, rebound timing, follow-up window for whipper (B for strike, A for grapple catch, Control Stick for finisher if strong whip + Special), corner counter detection if target reaches turnbuckle |
+| **Logic NOT here** | Standard grapple slot resolution, ground game |
+| **Entry events** | `IRISH_WHIP_INITIATED` from GrappleHold (L-button whip) |
+| **Exit events** | `WHIP_FOLLOWUP_STRIKE` → Striking, `WHIP_FOLLOWUP_GRAPPLE` → GrappleHold (IrishWhipHold subtype), `WHIP_TO_CORNER` → Stunned.BarricadeLean or CornerSlump (defender), `WHIP_NO_FOLLOWUP` → Neutral (both) |
+| **Guards** | Follow-up window has fixed frame count. If window expires, both return to Neutral. Corner counter requires defender input during specific frame window. |
+
+### Downed
+
+| Aspect | Detail |
+|--------|--------|
+| **Logic here** | Get-up timer (auto-rise after N frames based on spirit tier and body damage), substate classification (face up, face down, sitting up, sitting down — determined by the move that caused the knockdown), vulnerability flags for opponent ground interactions |
+| **Logic NOT here** | Active input resolution (downed character has no offensive options), grapple logic, striking logic |
+| **Entry events** | `KNOCKDOWN` from ExecutingMove or Striking, `FLYING_ATTACK_MISS` from Aerial |
+| **Exit events** | `RISE_TIMER_EXPIRED` → Rising, `OPPONENT_GROUND_GRAPPLE` → GroundInteraction (as defender), `OPPONENT_PIN` → PinAttempt, `OPPONENT_PICKUP` → Neutral (standing, dazed) |
+| **Guards** | Cannot rise before minimum downed frames. Rise speed scales with spirit tier. Cannot be pinned during Falling substate (must be fully Prone). |
+
+### Rising
+
+| Aspect | Detail |
+|--------|--------|
+| **Logic here** | Rise animation frame counter, iframes during first N frames of rise, R-hold detection for RecoveringAttack branch, spirit-based kip-up availability |
+| **Logic NOT here** | Standard movement, grapple initiation, striking |
+| **Entry events** | `RISE_TIMER_EXPIRED` from Downed |
+| **Exit events** | `RISE_COMPLETE` → Neutral, `RECOVERING_ATTACK_INPUT` → Striking (ducking attack slot), `HIT_DURING_RISE` → Downed (if after iframes expire) |
+| **Guards** | RecoveringAttack only fires if R was held before rise began. Kip-up only available if SpiritMeter tier ≥ Hot. |
+
+### PinAttempt
+
+| Aspect | Detail |
+|--------|--------|
+| **Logic here** | Count progression (1, 2, 3), kickout check per count (defender mashes, difficulty scaled by body damage + spirit tier), referee position tracking, rope break detection |
+| **Logic NOT here** | Move execution, standard striking, grapple initiation |
+| **Entry events** | `MOVE_PIN` from ExecutingMove, or manual pin input near downed opponent |
+| **Exit events** | `PIN_SUCCESS` → MatchManager (win condition), `KICKOUT` → Rising (defender) + Neutral (attacker), `ROPE_BREAK` → Neutral (both) |
+| **Guards** | Cannot pin if opponent is not in valid Downed substate. Cannot pin outside ring in standard match. Rope break auto-triggers if defender's position overlaps rope hitbox. |
+
+### SubmissionAttempt
+
+| Aspect | Detail |
+|--------|--------|
+| **Logic here** | Hold strength decay/build (attacker mashes to tighten, defender mashes to escape), escape threshold (based on body part damage to targeted limb + spirit tier), tap-out threshold, rope break detection |
+| **Logic NOT here** | Everything else |
+| **Entry events** | `MOVE_SUBMIT` from ExecutingMove |
+| **Exit events** | `SUBMISSION_SUCCESS` → MatchManager (win condition), `ESCAPE_SUBMISSION` → Rising (defender) + Neutral (attacker), `ROPE_BREAK` → Neutral (both) |
+| **Guards** | Same pin guards apply. Submission difficulty scales with specific body part damage (a leg submission is harder to escape if leg damage is high). |
+
+### Stunned
+
+| Aspect | Detail |
+|--------|--------|
+| **Logic here** | Stun duration countdown (frames), vulnerability flags (grappable, strikeable, pushable), surface-type response routing (BarricadeLean, BalanceStruggle, Dazed) |
+| **Logic NOT here** | Offensive input, movement |
+| **Entry events** | `HIT_RECEIVED` (light), `GRAPPLE_REVERSED` (attacker becomes stunned), `COLLISION_SURFACE` (barricade, edge) |
+| **Exit events** | `STUN_EXPIRED` → Neutral, `HIT_DURING_STUN` → Downed (if threshold exceeded), `GRAPPLED_WHILE_STUNNED` → GrappleHold (as defender) |
+| **Guards** | Stun duration cannot be shortened by input. BalanceStruggle can only transition to Falling if struck from behind. |
+
+### Aerial
+
+| Aspect | Detail |
+|--------|--------|
+| **Logic here** | Turnbuckle climb frame counter, top rope perch state (taunt available, attack available, opponent counter-grapple window), launch trajectory (standing target vs downed target vs outside target), Special override for flying finisher |
+| **Logic NOT here** | Ground grapple, standard striking |
+| **Entry events** | `CLIMB_TURNBUCKLE` from Neutral (near corner, D-Pad + C-Down) |
+| **Exit events** | `FLYING_ATTACK_HIT` → ExecutingMove, `FLYING_ATTACK_MISS` → Downed (FlyingAttackMiss → Falling), `FLYING_COUNTER_GRAPPLED` → Stunned (countered by opponent), `CLIMB_DOWN` → Neutral |
+| **Guards** | Cannot launch if no valid target (target must be in range and in a valid state). Flying finisher only if SpiritMeter.isSpecialActive(). Opponent can counter-grapple only during OnTopRope state within defined frame window. |
+
+### Taunt
+
+| Aspect | Detail |
+|--------|--------|
+| **Logic here** | Taunt animation frame counter, spirit meter boost event dispatch, slot resolution (Control Stick direction → taunt slot 1/2/3), Special taunt override |
+| **Logic NOT here** | Offensive actions, defensive actions |
+| **Entry events** | `TAUNT_INPUT` from Neutral |
+| **Exit events** | `TAUNT_COMPLETE` → Neutral, `HIT_DURING_TAUNT` → Stunned (taunts are interruptible) |
+| **Guards** | Cannot taunt while in any non-Neutral state. Special taunt only if SpiritMeter.isSpecialActive(). |
+
+---
+
+## 4. MOVE RESOLUTION PIPELINE
+
+```
+Frame N:  Raw Input Capture
+          │
+Frame N:  ┌─────────────────┐
+          │  INPUT BUFFER    │  Stores raw button states + durations.
+          │                  │  Measures tap vs hold (A held > threshold = strong).
+          │                  │  No game logic. Pure data capture.
+          │                  │  Lives OUTSIDE the HFSM.
+          └────────┬─────────┘
+                   │
+Frame N:  ┌────────▼─────────┐
+          │  CONTEXT RESOLVER │  Queries current Action state + Interaction region.
+          │                  │  Determines input context:
+          │                  │    - Am I in Neutral? → grapple/strike/run/taunt
+          │                  │    - Am I in GrappleHold? → direction+button = slot
+          │                  │    - Am I in Rising? → R held = recovering attack
+          │                  │    - Am I Downed? → ignore offensive input
+          │                  │    - Am I defender in GrappleHold? → reversal input
+          │                  │  Lives at the ACTION REGION root level.
+          └────────┬─────────┘
+                   │
+Frame N:  ┌────────▼─────────┐
+          │  SLOT RESOLVER    │  Maps context + input to a slot ID string.
+          │                  │  Example: GrappleHold.FrontStrong + ↑ + A
+          │                  │           → "frontStrongGrappleSlot3"
+          │                  │  If SpiritMeter.isSpecialActive() and input is
+          │                  │  Control Stick → override to finisher slot.
+          │                  │  Lives inside GrappleHold / Striking / GroundGrapple
+          │                  │  state handlers (each state owns its own slot map).
+          └────────┬─────────┘
+                   │
+Frame N:  ┌────────▼─────────┐
+          │  MOVE DATA LOOKUP │  Reads character's moves.json:
+          │                  │    slotId → moveId
+          │                  │  Then reads moveDatabase.json:
+          │                  │    moveId → { power, ko, bleed, feature,
+          │                  │              totalFrames, impactFrame,
+          │                  │              reversalWindowStart,
+          │                  │              reversalWindowEnd,
+          │                  │              targetBodyPart }
+          │                  │  Lives in MoveEngine (external service, not a state).
+          └────────┬─────────┘
+                   │
+Frame N:  ┌────────▼─────────┐
+          │  STATE TRANSITION │  GrappleHold → ExecutingMove.AttackerExecuting
+          │                  │  Defender's Action state →
+          │                  │      ExecutingMove.DefenderReceiving
+          │                  │  Interaction region creates lock.
+          │                  │  Lives in the HFSM transition system.
+          └────────┬─────────┘
+                   │
+Frame N+1 ┌────────▼─────────┐
+to N+T:   │  FRAME STEP       │  ExecutingMove ticks its internal frame counter
+          │  EXECUTION        │  each frame. On impactFrame:
+          │                  │    - Emit HIT event to BodyDamage region
+          │                  │    - Emit SPIRIT event to SpiritMeter region
+          │                  │    - Evaluate KO / bleed thresholds
+          │                  │  On totalFrames reached:
+          │                  │    - Emit MOVE_COMPLETE
+          │                  │  Lives inside ExecutingMove state.
+          └────────┬─────────┘
+                   │
+Frame     ┌────────▼─────────┐
+impact:   │  HIT EVALUATION   │  Applies damage:
+          │                  │    power tier → numeric damage value (lookup table)
+          │                  │    target body part HP -= damage
+          │                  │  Checks ko flag against head/body damage threshold.
+          │                  │  Checks bleed flag against head damage threshold.
+          │                  │  Checks feature: Pin → queue PinAttempt,
+          │                  │                  Submit → queue SubmissionAttempt.
+          │                  │  Lives in BodyDamage region + MoveEngine.
+          └────────┬─────────┘
+                   │
+Frame N+T:┌────────▼─────────┐
+          │  RECOVERY         │  Attacker enters recovery frames
+          │                  │  (cannot act for move.recoveryFrames).
+          │                  │  Defender transitions based on move result:
+          │                  │    - Still standing → Stunned
+          │                  │    - Knocked down → Downed
+          │                  │    - KO → Downed (extended timer, KO flag)
+          │                  │    - Pin feature → PinAttempt
+          │                  │    - Submit feature → SubmissionAttempt
+          │                  │  Lives in ExecutingMove exit logic.
+          └────────┬─────────┘
+                   │
+Frame     ┌────────▼─────────┐
+N+T+R:    │  STATE EXIT       │  Attacker → Neutral.Idle
+          │                  │  Interaction region → None
+          │                  │  Both characters return to independent action.
+          │                  │  Lives in HFSM transition system.
+          └──────────────────┘
+```
+
+### Key Constraint: Single-Frame Resolution
+
+The Context Resolver, Slot Resolver, and Move Data Lookup all execute within the **same frame** that the input is captured. There is no multi-frame "resolution phase" for the attacker's input. The moment direction+button is pressed inside GrappleHold, slot resolution and move lookup happen atomically. The transition to ExecutingMove begins on the **next** frame.
+
+This is how the original AKI engine operated — input is resolved deterministically within the frame it arrives. The only multi-frame element is hold duration measurement (tap vs hold A), which is measured during GrappleInitiation before GrappleHold is entered.
+
+---
+
+## 5. REVERSAL & TIMING ARCHITECTURE
+
+### Reversal Window Definition
+
+Every move in `moveDatabase.json` defines:
+
+```json
+{
+  "reversalWindowStart": 4,
+  "reversalWindowEnd": 12,
+  "reversalType": "grapple"
+}
+```
+
+These are **frame offsets from ExecutingMove entry**, not animation events.
+
+### Evaluation Model: Window-Polled, Not Interrupt-Driven
+
+Each frame during ExecutingMove, the system checks:
+
+```
+if (currentFrame >= move.reversalWindowStart &&
+    currentFrame <= move.reversalWindowEnd &&
+    defender.inputBuffer.hasReversalInput())
+```
+
+This is **polled** every frame within the window. It is not an interrupt. The defender's reversal input is checked against the buffer, not against an event queue. This ensures determinism — the exact frame the reversal succeeds is always reproducible given the same inputs.
+
+### Why Polled Over Interrupt
+
+Interrupt-driven reversal would require event ordering guarantees across two characters' input streams. In a deterministic frame-step engine, polling is simpler and guarantees frame-identical results on replay. It is also how the N64 hardware loop operated — read input, process logic, render.
+
+### Strike Reversal vs Grapple Reversal
+
+| Property | Strike Reversal | Grapple Reversal |
+|----------|----------------|-----------------|
+| **Trigger** | R pressed during block state within ±2 frames of opponent's strike impact frame | Any reversal-capable input during grapple move's reversal window |
+| **Defender state requirement** | Must be in Neutral.Blocking, facing attacker | Must be in ExecutingMove.DefenderReceiving (inside a grapple) |
+| **Success result** | Defender transitions to Reversal.StrikeReversal, executes counter-strike slot | Defender transitions to Reversal.GrappleReversal, executes back grapple counter slot |
+| **Window size** | Tight (±2 frames from impact = 5 frame window) | Variable per move (defined in JSON, typically 6-15 frames, wider for strong grapples) |
+| **Spirit influence** | No spirit influence on window size; perfect timing is pure player skill | Reversal probability modulated by spirit differential: defender at higher spirit tier has wider effective window, or guaranteed success at max differential |
+
+### Perfect-Timing Detection (Strike)
+
+```
+perfectTimingFrame = opponent.currentMove.impactFrame
+actualInputFrame = defender.inputBuffer.lastReversalInputFrame
+
+delta = abs(perfectTimingFrame - actualInputFrame)
+
+if (delta <= PERFECT_WINDOW) → StrikeReversal
+else if (delta <= BLOCK_WINDOW) → Block (damage negated, no counter)
+else → Hit connects
+```
+
+Constants:
+- `PERFECT_WINDOW = 2` (frames)
+- `BLOCK_WINDOW = 6` (frames, only if R is held = blocking stance)
+
+### Spirit-Modulated Grapple Reversal
+
+The AKI engine does not use purely timing-based grapple reversal. It uses a **probability roll modulated by spirit differential**:
+
+```
+baseReversalChance = move.reversalDifficulty  // 0.0 to 1.0
+spiritBonus = (defender.spiritTier - attacker.spiritTier) * SPIRIT_REVERSAL_WEIGHT
+
+effectiveChance = clamp(baseReversalChance + spiritBonus, 0.0, 1.0)
+
+// Deterministic RNG seeded by frame count + both character IDs
+if (seededRandom(frameCount, attackerId, defenderId) < effectiveChance
+    && defenderInputInWindow)
+  → REVERSAL_SUCCESS
+else
+  → REVERSAL_FAIL (move continues)
+```
+
+This preserves the original game's feel: weak grapples are nearly impossible to reverse (low base chance + spirit raises defender spirit on hit anyway), strong grapples have meaningful reversal windows, and spirit differential is the primary reversal driver.
+
+**For deterministic netcode safety**: the seeded RNG ensures identical results given identical frame state. No system randomness.
+
+---
+
+## 6. SPECIAL / FINISHER OVERRIDE MODEL
+
+### Architecture: Orthogonal Flag Region + Slot Resolution Intercept
+
+Special is **not** a separate state in the Action region. A character in Special mode can be in Neutral, GrappleHold, Aerial, or any other Action state. Special is a **flag** exposed by the orthogonal Spirit Meter region.
+
+### How It Works
+
+1. **Spirit Meter Region** tracks momentum value (0-255). When value crosses `SPECIAL_THRESHOLD` (e.g., 200), the region transitions to `Special` tier and sets `isSpecialActive = true`.
+
+2. **Slot Resolver** checks `isSpecialActive` as part of every slot resolution:
+
+```
+function resolveSlot(holdType, direction, button, isSpecialActive) {
+  if (isSpecialActive && isFinisherInput(holdType, direction, button)) {
+    return getFinisherSlot(holdType);
+    // e.g., frontFinisherSlot, backFinisherSlot,
+    //        frontTurnbuckleFinisherSlot, etc.
+  }
+  return getStandardSlot(holdType, direction, button);
+}
+```
+
+3. **On finisher execution**: Spirit Meter receives `FINISHER_EXECUTED` event, resets momentum to 0, transitions back to `Neutral` tier, sets `isSpecialActive = false`.
+
+### Finisher Input Mapping
+
+| Context | Finisher Input | Finisher Slot |
+|---------|---------------|---------------|
+| Front Strong Grapple | Control Stick | `frontFinisherSlot` |
+| Back Strong Grapple | Control Stick | `backFinisherSlot` |
+| Front Turnbuckle Strong Grapple | Control Stick | `frontTurnbuckleFinisherSlot` |
+| Back Turnbuckle Strong Grapple | Control Stick | `backTurnbuckleFinisherSlot` |
+| Irish Whip Strong Grapple | Control Stick | `irishWhipFinisherSlot` |
+| Flying Attack (top rope) | Release C-Down | `standingOpponentFlyingFinisherSlot` or `layingOpponentFlyingFinisherSlot` |
+| Ground Upper Body (face up) | A | `facingUpUpperBodyFinisherSlot` |
+| Ground Upper Body (face down) | A | `facingDownUpperBodyFinisherSlot` |
+| Ground Lower Body (face up) | A | `facingUpLowerBodyFinisherSlot` |
+| Ground Lower Body (face down) | A | `facingDownLowerBodyFinisherSlot` |
+| Apron Strong Grapple | Control Stick | `finisherFromApronSlot` |
+
+### Why Not a Separate State
+
+Duplicating the entire grapple tree with "Special" variants would double the state count for zero behavioral difference. The grapple mechanics are identical whether Special is active or not — only the slot resolution output changes. A flag query at the slot resolution point is the minimal, correct design.
+
+### Special Decay
+
+If Special is active and no finisher is executed within `SPECIAL_DURATION_FRAMES`, momentum decays. The Spirit Meter region handles this entirely internally. The Action region never needs to know about decay.
+
+---
+
+## 7. TRANSITION GUARDS & FAILURE PREVENTION
+
+### Grapple Deadlock Prevention
+
+**Problem**: Both characters press A on the same frame at grapple range.
+
+**Solution**: Priority resolution with deterministic tiebreak.
+
+```
+if (bothAttemptingGrapple) {
+  if (charA.grappleStrength > charB.grappleStrength)
+    → charA is attacker, charB is defender
+  else if (charB.grappleStrength > charA.grappleStrength)
+    → charB is attacker, charA is defender
+  else
+    // Same strength: deterministic tiebreak
+    → lower characterId is attacker
+    // (or: attacker is the one whose input arrived
+    //  on an earlier buffered frame, if distinguishable)
+}
+```
+
+The Interaction region creates exactly one `GrappleLock` with assigned roles. Both characters transition atomically on the same frame.
+
+### Double Execution Prevention
+
+**Problem**: Move resolves twice due to input echo or state re-entry.
+
+**Solution**: `ExecutingMove` sets a `moveExecutionLock` flag on the Interaction region at entry. No new move resolution can occur while this lock is held. The lock is released only on `MOVE_COMPLETE` event.
+
+```
+// In GrappleHold, before transitioning to ExecutingMove:
+if (interaction.moveExecutionLock) return; // silently drop
+interaction.moveExecutionLock = true;
+transition(ExecutingMove);
+```
+
+### Animation Desync Prevention
+
+**Problem**: Animation playback drifts from state machine frame counter.
+
+**Solution**: Animation is a **presentation-only slave**. The HFSM owns the frame counter. Each frame, the animation layer reads:
+
+```
+currentAnimation = stateToAnimationMap[currentState][currentMoveId]
+currentAnimFrame = executingMove.frameCounter
+```
+
+The animation layer never advances its own counter. It never triggers state changes. It is a pure function of `(state, moveId, frameCounter) → visual output`. If animation playback is slower or faster than the logic frame rate, it interpolates visually but never affects game state.
+
+### State Corruption Prevention
+
+**Problem**: Character ends up in an impossible state combination (e.g., Downed + GrappleHold simultaneously).
+
+**Solution**: Exclusive FSM enforcement. The Action region is a strict exclusive state machine. Transitioning to any state automatically exits the previous state. There is no mechanism to be in two Action states simultaneously.
+
+Additionally, every transition function asserts:
+
+```
+transition(newState) {
+  assert(this.currentState.canExit(), 'Illegal exit from ' + this.currentState.id);
+  assert(newState.canEnter(this.context), 'Illegal entry to ' + newState.id);
+  this.currentState.onExit();
+  this.currentState = newState;
+  this.currentState.onEnter(this.context);
+}
+```
+
+### Input Race Condition Prevention
+
+**Problem**: Two inputs arrive on the same frame that conflict (e.g., A + B simultaneously).
+
+**Solution**: Input priority table, evaluated in fixed order:
+
+```
+Priority (highest first):
+1. Reversal input (R during opponent's attack)
+2. Grapple input (A)
+3. Strike input (B)
+4. Movement input (D-Pad)
+5. Taunt input (Control Stick)
+6. Run input (C-Down)
+```
+
+Only the highest-priority input for a given frame is forwarded to the Context Resolver. Lower-priority inputs on the same frame are discarded.
+
+### Finisher During Invalid State Prevention
+
+**Problem**: Player activates Special and tries to finisher from Neutral (no grapple hold).
+
+**Solution**: Finisher is not an Action state. Finisher is a slot override inside GrappleHold. The finisher slot can only resolve if:
+
+1. `SpiritMeter.isSpecialActive() === true`
+2. Current Action state is a `*StrongHold` substate of GrappleHold (or equivalent strong context for ground, turnbuckle, irish whip, apron, aerial)
+3. Input is Control Stick (or release C-Down for aerial)
+
+If any condition fails, the input is either resolved to a normal slot or dropped.
+
+---
+
+## 8. VANILLA JS IMPLEMENTATION SKELETON
+
+### HFSM Base Classes
+
+```javascript
+// ─────────────────────────────────────────────
+// State.js — Base state class
+// ─────────────────────────────────────────────
+
+export class State {
+  constructor(id, parent = null) {
+    this.id = id;
+    this.parent = parent;
+    this.children = new Map();
+    this.activeChild = null;
+    this.frameCounter = 0;
+  }
+
+  addChild(state) {
+    state.parent = this;
+    this.children.set(state.id, state);
+    return this;
+  }
+
+  canEnter(context) { return true; }
+  canExit() { return true; }
+
+  onEnter(context) {
+    this.frameCounter = 0;
+  }
+
+  onExit() {
+    if (this.activeChild) {
+      this.activeChild.onExit();
+      this.activeChild = null;
+    }
+  }
+
+  onUpdate(context) {
+    this.frameCounter++;
+    if (this.activeChild) {
+      this.activeChild.onUpdate(context);
+    }
+  }
+
+  transitionTo(childId, context) {
+    const next = this.children.get(childId);
+    if (!next) throw new Error(`No child state: ${childId}`);
+    if (!next.canEnter(context)) return false;
+
+    if (this.activeChild) {
+      if (!this.activeChild.canExit()) return false;
+      this.activeChild.onExit();
+    }
+
+    this.activeChild = next;
+    this.activeChild.onEnter(context);
+    return true;
+  }
+
+  getActiveLeaf() {
+    if (!this.activeChild) return this;
+    return this.activeChild.getActiveLeaf();
+  }
+}
+```
+
+```javascript
+// ─────────────────────────────────────────────
+// HFSMController.js — Character state controller
+// ─────────────────────────────────────────────
+
+import { State } from './State.js';
+
+export class HFSMController {
+  constructor(characterId) {
+    this.characterId = characterId;
+
+    // Exclusive regions
+    this.actionRegion = this.buildActionTree();
+    this.interactionRegion = new InteractionRegion();
+
+    // Orthogonal regions
+    this.spiritMeter = new SpiritMeterRegion();
+    this.bodyDamage = new BodyDamageRegion();
+
+    // Event bus for cross-region communication
+    this.events = new EventBus();
+    this.wireEvents();
+  }
+
+  buildActionTree() {
+    const root = new State('Action');
+
+    root.addChild(new NeutralState('Neutral'));
+    root.addChild(new StrikingState('Striking'));
+    root.addChild(new GrappleInitiationState('GrappleInitiation'));
+    root.addChild(new GrappleHoldState('GrappleHold'));
+    root.addChild(new ExecutingMoveState('ExecutingMove'));
+    root.addChild(new IrishWhipState('IrishWhip'));
+    root.addChild(new DownedState('Downed'));
+    root.addChild(new RisingState('Rising'));
+    root.addChild(new StunnedState('Stunned'));
+    root.addChild(new AerialState('Aerial'));
+    root.addChild(new PinAttemptState('PinAttempt'));
+    root.addChild(new SubmissionAttemptState('SubmissionAttempt'));
+    root.addChild(new GroundInteractionState('GroundInteraction'));
+    root.addChild(new ReversalState('Reversal'));
+    root.addChild(new TauntState('Taunt'));
+    root.addChild(new RingsideState('Ringside'));
+    root.addChild(new DoubleTeamState('DoubleTeam'));
+    root.addChild(new EntranceState('Entrance'));
+
+    root.transitionTo('Neutral', {});
+    return root;
+  }
+
+  wireEvents() {
+    // Action → SpiritMeter
+    this.events.on('MOVE_HIT', (e) => this.spiritMeter.onMoveHit(e));
+    this.events.on('MOVE_RECEIVED', (e) => this.spiritMeter.onMoveReceived(e));
+    this.events.on('TAUNT_COMPLETE', () => this.spiritMeter.onTaunt());
+    this.events.on('FINISHER_EXECUTED', () => this.spiritMeter.onFinisherUsed());
+
+    // Action → BodyDamage
+    this.events.on('DAMAGE_DEALT', (e) => this.bodyDamage.applyDamage(e));
+
+    // BodyDamage → Action (threshold events)
+    this.bodyDamage.onThreshold = (event) => this.events.emit(event.type, event);
+  }
+
+  update(inputSnapshot) {
+    const context = {
+      characterId: this.characterId,
+      input: inputSnapshot,
+      spiritMeter: this.spiritMeter,
+      bodyDamage: this.bodyDamage,
+      interaction: this.interactionRegion,
+      events: this.events,
+      actionState: this.actionRegion.getActiveLeaf()
+    };
+
+    // Orthogonal regions tick independently
+    this.spiritMeter.update(context);
+    this.bodyDamage.update(context);
+
+    // Exclusive regions
+    this.actionRegion.onUpdate(context);
+    this.interactionRegion.update(context);
+  }
+}
+```
+
+### Example State: GrappleHoldState
+
+```javascript
+// ─────────────────────────────────────────────
+// GrappleHoldState.js
+// ─────────────────────────────────────────────
+
+import { State } from './State.js';
+import { SlotResolver } from '../moves/SlotResolver.js';
+
+export class GrappleHoldState extends State {
+  constructor(id) {
+    super(id);
+    this.holdType = null;     // 'frontWeak', 'frontStrong', 'backWeak', 'backStrong', ...
+    this.holdTimer = 0;
+    this.maxHoldFrames = 0;
+    this.switchCount = 0;
+    this.maxSwitches = 3;
+  }
+
+  canEnter(context) {
+    return context.interaction &&
+           context.interaction.state === 'GrappleLock' &&
+           !context.interaction.moveExecutionLock;
+  }
+
+  onEnter(context) {
+    super.onEnter(context);
+    this.holdType = context.interaction.holdType;
+    this.holdTimer = 0;
+    this.switchCount = 0;
+
+    // Hold window varies by grapple strength
+    this.maxHoldFrames = this.holdType.includes('Strong') ? 45 : 30;
+  }
+
+  onUpdate(context) {
+    super.onUpdate(context);
+    this.holdTimer++;
+
+    const { input, interaction, spiritMeter, events } = context;
+
+    // Timeout: grapple breaks
+    if (this.holdTimer >= this.maxHoldFrames) {
+      events.emit('HOLD_TIMEOUT', { interaction });
+      return;
+    }
+
+    // L-button: position switch (front ↔ back)
+    if (input.justPressed('L') && this.switchCount < this.maxSwitches) {
+      this.switchCount++;
+      this.holdType = this.flipPosition(this.holdType);
+      interaction.holdType = this.holdType;
+      return;
+    }
+
+    // R-button: break grapple
+    if (input.justPressed('R')) {
+      events.emit('HOLD_BROKEN', { interaction });
+      return;
+    }
+
+    // Directional + button input: resolve move slot
+    const moveInput = input.getDirectionalButton();
+    if (moveInput) {
+      const slotId = SlotResolver.resolve(
+        this.holdType,
+        moveInput.direction,
+        moveInput.button,
+        spiritMeter.isSpecialActive()
+      );
+
+      if (slotId) {
+        events.emit('SLOT_RESOLVED', {
+          slotId,
+          interaction,
+          attackerId: context.characterId
+        });
+      }
+    }
+  }
+
+  flipPosition(holdType) {
+    if (holdType.startsWith('front')) return holdType.replace('front', 'back');
+    if (holdType.startsWith('back')) return holdType.replace('back', 'front');
+    return holdType;
+  }
+
+  canExit() { return true; }
+
+  onExit() {
+    super.onExit();
+    this.holdType = null;
+    this.holdTimer = 0;
+    this.switchCount = 0;
+  }
+}
+```
+
+### Slot Resolver (External Service)
+
+```javascript
+// ─────────────────────────────────────────────
+// SlotResolver.js
+// ─────────────────────────────────────────────
+
+const SLOT_MAPS = {
+  frontWeak: {
+    'neutral+A':    'frontWeakGrappleSlot1',
+    'leftRight+A':  'frontWeakGrappleSlot2',
+    'up+A':         'frontWeakGrappleSlot3',
+    'down+A':       'frontWeakGrappleSlot4',
+    'neutral+B':    'frontWeakGrappleSlot5',
+    'leftRight+B':  'frontWeakGrappleSlot6',
+    'up+B':         'frontWeakGrappleSlot7',
+    'down+B':       'frontWeakGrappleSlot8',
+  },
+  frontStrong: {
+    'neutral+A':    'frontStrongGrappleSlot1',
+    'leftRight+A':  'frontStrongGrappleSlot2',
+    'up+A':         'frontStrongGrappleSlot3',
+    'down+A':       'frontStrongGrappleSlot4',
+    'neutral+B':    'frontStrongGrappleSlot5',
+    'leftRight+B':  'frontStrongGrappleSlot6',
+    'up+B':         'frontStrongGrappleSlot7',
+    'down+B':       'frontStrongGrappleSlot8',
+    'controlStick': 'frontFinisherSlot',
+  },
+  backWeak: {
+    'neutral+A':       'backWeakGrappleSlot1',
+    'anyDirection+A':  'backWeakGrappleSlot2',
+    'neutral+B':       'backWeakGrappleSlot3',
+    'anyDirection+B':  'backWeakGrappleSlot4',
+  },
+  backStrong: {
+    'neutral+A':       'backStrongGrappleSlot1',
+    'anyDirection+A':  'backStrongGrappleSlot2',
+    'neutral+B':       'backStrongGrappleSlot3',
+    'anyDirection+B':  'backStrongGrappleSlot4',
+    'controlStick':    'backFinisherSlot',
+  },
+  // ... turnbuckle, apron, irish whip maps follow same pattern
+};
+
+export class SlotResolver {
+  static resolve(holdType, direction, button, isSpecialActive) {
+    const map = SLOT_MAPS[holdType];
+    if (!map) return null;
+
+    // Finisher override: only from strong holds, only with Special active
+    if (isSpecialActive && button === 'controlStick' && holdType.includes('Strong')) {
+      const finisherKey = 'controlStick';
+      if (map[finisherKey]) return map[finisherKey];
+    }
+
+    const key = `${direction}+${button}`;
+    return map[key] || null;
+  }
+}
+```
+
+### Move Engine (External Service)
+
+```javascript
+// ─────────────────────────────────────────────
+// MoveEngine.js
+// ─────────────────────────────────────────────
+
+export class MoveEngine {
+  constructor(moveDatabase, characterMoveAssignments) {
+    this.db = moveDatabase;              // moveDatabase.json moves array
+    this.assignments = characterMoveAssignments; // per-character moves.json
+  }
+
+  lookupMove(characterId, slotId) {
+    const moveName = this.assignments[characterId]?.[slotId];
+    if (!moveName) return null;
+
+    const moveData = this.db.find(m => m.name === moveName);
+    return moveData || null;
+  }
+}
+```
+
+### Deterministic Update Loop
+
+```javascript
+// ─────────────────────────────────────────────
+// GameLoop.js
+// ─────────────────────────────────────────────
+
+export class GameLoop {
+  constructor(characters, matchManager, inputSystem) {
+    this.characters = characters;  // Map<charId, HFSMController>
+    this.matchManager = matchManager;
+    this.inputSystem = inputSystem;
+    this.frameCount = 0;
+    this.frameRate = 60;
+    this.msPerFrame = 1000 / this.frameRate;
+  }
+
+  /**
+   * Called exactly once per logic frame.
+   * All game state mutation happens here.
+   * Animation/rendering happens separately in a RAF loop
+   * that reads but never writes game state.
+   */
+  tick() {
+    this.frameCount++;
+
+    // 1. Capture all inputs atomically
+    const inputs = this.inputSystem.captureAll();
+
+    // 2. Update each character's HFSM
+    for (const [charId, controller] of this.characters) {
+      controller.update(inputs[charId]);
+    }
+
+    // 3. Resolve cross-character interactions
+    //    (grapple initiation collision, hit detection, etc.)
+    this.resolveInteractions();
+
+    // 4. Update match state (count-out timers, referee, etc.)
+    this.matchManager.update(this.frameCount);
+  }
+
+  resolveInteractions() {
+    // Check for pending grapple attempts that need collision resolution
+    // Check for active hitboxes against hurtboxes
+    // Create Interaction locks as needed
+    // This is where dual-character state synchronization happens
+  }
+
+  // Rendering is a separate loop:
+  startRenderLoop(renderer) {
+    const render = () => {
+      for (const [charId, controller] of this.characters) {
+        renderer.syncCharacter(charId, controller);
+        // renderer reads: activeState, frameCounter, moveId
+        // renderer writes: nothing
+      }
+      renderer.draw();
+      requestAnimationFrame(render);
+    };
+    requestAnimationFrame(render);
+  }
+}
+```
+
+### Event Bus
+
+```javascript
+// ─────────────────────────────────────────────
+// EventBus.js
+// ─────────────────────────────────────────────
+
+export class EventBus {
+  constructor() {
+    this.listeners = new Map();
+    this.queue = [];        // Queued for deterministic processing
+  }
+
+  on(event, handler) {
+    if (!this.listeners.has(event)) this.listeners.set(event, []);
+    this.listeners.get(event).push(handler);
+  }
+
+  emit(event, data = {}) {
+    // Queue instead of immediate dispatch for determinism
+    this.queue.push({ event, data });
+  }
+
+  flush() {
+    // Called once per frame, after all state updates
+    // Guarantees events are processed in emit order
+    while (this.queue.length > 0) {
+      const { event, data } = this.queue.shift();
+      const handlers = this.listeners.get(event);
+      if (handlers) {
+        for (const handler of handlers) {
+          handler(data);
+        }
+      }
+    }
+  }
+}
+```
+
+### Input Snapshot
+
+```javascript
+// ─────────────────────────────────────────────
+// InputSnapshot.js
+// ─────────────────────────────────────────────
+
+export class InputSnapshot {
+  constructor() {
+    this.buttons = {};          // { A: false, B: false, R: false, L: false, ... }
+    this.holdDurations = {};    // { A: 0, B: 0, ... } in frames
+    this.dpad = { x: 0, y: 0 };
+    this.controlStick = { x: 0, y: 0 };
+    this.previousButtons = {};
+  }
+
+  justPressed(button) {
+    return this.buttons[button] && !this.previousButtons[button];
+  }
+
+  isHeld(button) {
+    return this.buttons[button];
+  }
+
+  holdFrames(button) {
+    return this.holdDurations[button] || 0;
+  }
+
+  isStrongGrapple() {
+    return this.holdDurations['A'] >= STRONG_GRAPPLE_HOLD_THRESHOLD;
+  }
+
+  getDirectionalButton() {
+    // Returns { direction, button } if a direction+button combo was input this frame
+    const dir = this.resolveDirection();
+    for (const btn of ['A', 'B']) {
+      if (this.justPressed(btn)) {
+        return { direction: dir, button: btn };
+      }
+    }
+    if (this.controlStickMoved()) {
+      return { direction: 'neutral', button: 'controlStick' };
+    }
+    return null;
+  }
+
+  resolveDirection() {
+    const { x, y } = this.dpad;
+    if (x !== 0 && y === 0) return 'leftRight';
+    if (x === 0 && y > 0)  return 'up';
+    if (x === 0 && y < 0)  return 'down';
+    if (x !== 0 || y !== 0) return 'anyDirection';
+    return 'neutral';
+  }
+
+  controlStickMoved() {
+    return Math.abs(this.controlStick.x) > 0.5 ||
+           Math.abs(this.controlStick.y) > 0.5;
+  }
+
+  hasReversalInput() {
+    return this.justPressed('R') ||
+           this.justPressed('A') ||
+           this.justPressed('B') ||
+           this.justPressed('L');
+  }
+}
+```
+
+### Animation Layer (Presentation Only)
+
+```javascript
+// ─────────────────────────────────────────────
+// AnimationPresenter.js
+// ─────────────────────────────────────────────
+
+/**
+ * Pure read-only presentation layer.
+ * Reads HFSM state. Writes to Babylon.js scene.
+ * Never mutates game state.
+ */
+export class AnimationPresenter {
+  constructor(scene, animationLibrary) {
+    this.scene = scene;
+    this.library = animationLibrary; // Maps (stateId, moveId) → animation clip name
+  }
+
+  syncCharacter(charId, controller) {
+    const leaf = controller.actionRegion.getActiveLeaf();
+    const stateId = leaf.id;
+    const frameCounter = leaf.frameCounter;
+    const moveId = leaf.currentMoveId || null;
+
+    const clipName = this.library.resolve(stateId, moveId);
+    const mesh = this.scene.getMeshByName(charId);
+
+    if (!mesh || !clipName) return;
+
+    // Set animation to exact frame — no independent playback
+    const anim = mesh.getAnimationByName(clipName);
+    if (anim) {
+      anim.goToFrame(frameCounter);
+    }
+  }
+}
+```
+
+---
+
+## 9. SCALABILITY JUSTIFICATION
+
+### Supports 100+ Wrestlers
+
+Wrestlers are defined entirely by JSON files (`moves.json` per character). The HFSM is shared infrastructure — every character runs the identical state machine. No wrestler-specific code exists anywhere in the engine. Adding wrestler 101 requires exactly one JSON file and zero code changes.
+
+### Supports Modded Move Libraries
+
+The move database (`moveDatabase.json`) is an external data file loaded at runtime. Community-created moves only need to follow the schema:
+
+```json
+{
+  "id": "string",
+  "name": "string",
+  "power": "S|A|B|C|D|E|F|G",
+  "ko": "boolean",
+  "bleed": "boolean",
+  "feature": "Pin|Submit|null",
+  "totalFrames": "number",
+  "impactFrame": "number",
+  "reversalWindowStart": "number",
+  "reversalWindowEnd": "number",
+  "reversalDifficulty": "number (0.0-1.0)",
+  "targetBodyPart": "head|body|armLeft|armRight|legLeft|legRight",
+  "eligibleSlots": ["array of slot category strings"]
+}
+```
+
+No engine modification required. The `MoveEngine` reads the database at load time. New moves are immediately available for assignment.
+
+### No Engine Refactor for New Moves
+
+The HFSM never references move names, move IDs, or move-specific logic. It references **slots**. A slot is a structural position in the input matrix. The move assigned to that slot is resolved at runtime from JSON. The HFSM doesn't know or care whether `frontStrongGrappleSlot3` contains "DDT 01" or "Custom Suplex 47". The frame counter ticks `totalFrames` regardless of what the move is.
+
+### Preserves Deterministic Behavior
+
+Every frame, the system processes:
+
+1. Input capture (pure data)
+2. State evaluation (deterministic FSM transitions)
+3. Slot resolution (lookup table)
+4. Move data read (JSON lookup)
+5. Frame counter increment (integer arithmetic)
+6. Reversal check (seeded RNG + frame comparison)
+7. Damage application (integer arithmetic)
+
+No randomness without deterministic seed. No floating-point drift. No animation-driven state changes. No OS-level timing dependencies. Given identical input sequences, the game produces identical frame-by-frame state histories. This is the foundation for future rollback netcode (snapshot entire state → rewind → replay with corrected inputs → fast-forward).
+
+### Maintains No Mercy Authenticity
+
+The architecture mirrors the original AKI engine's design philosophy:
+
+- **Spirit meter as momentum system**: not health bars, not stamina. Momentum drives reversal probability, Special activation, and recovery speed. This is the core of what makes No Mercy feel like No Mercy.
+- **Position-based grapple matrix**: front/back × weak/strong × direction × button → slot. This is the exact input structure from the original game.
+- **Fixed slot counts**: 8+8 front, 4+4 back, 2+2 turnbuckle, etc. The slot system is structurally identical to the original game's create-a-wrestler move assignment screen.
+- **Reversal as spirit-gated probability, not pure timing**: This preserves the original game's feel where a hot crowd/momentum wrestler is harder to keep down, and a cold wrestler is vulnerable.
+- **No combo chains**: Each move is a discrete, complete action. There are no dial-a-combos. This is deliberate and faithful.
+- **Irish whip as a distinct system**: The rope rebound → follow-up grapple is its own behavioral branch, just as it was in the original engine.
+- **Weak grapples raise defender spirit**: The original game's risk/reward design — weak grapples are safe for the attacker but help the defender build momentum — is preserved through the spirit meter event system.
+
+---
+
+## APPENDIX A: STATE TRANSITION SUMMARY TABLE
+
+| From | To | Trigger | Guard |
+|------|----|---------|-------|
+| Neutral.Idle | GrappleInitiation | A pressed + proximity + facing | Target grappable, not in iframes |
+| Neutral.Idle | Striking | B pressed | Target in range |
+| Neutral.Idle | Taunt | Control Stick | No active opponent threat |
+| Neutral.Walking | Neutral.Running | C-Down pressed | Clear running path |
+| Neutral.Running | Striking.RunningStrike | B pressed while running | Target in range |
+| Neutral.Running | GrappleInitiation.AttemptingRunning | A pressed while running | Target in grapple range |
+| Neutral.Idle | Neutral.Blocking | R held, facing opponent | Standing only |
+| GrappleInitiation | GrappleHold | Proximity + facing passed | Interaction region free |
+| GrappleInitiation | Neutral | Proximity failed (whiff) | — |
+| GrappleHold | ExecutingMove | Direction + button input | Slot resolved, lock not held |
+| GrappleHold | IrishWhip | L pressed (whip) | Valid whip direction |
+| GrappleHold | Neutral | Timeout or R-break | — |
+| GrappleHold | Reversal.GrappleReversal | Defender reversal succeeded | Spirit check + window check |
+| ExecutingMove | Neutral | Move complete (attacker) | Recovery frames elapsed |
+| ExecutingMove | Downed | Move complete (defender, knockdown) | — |
+| ExecutingMove | Stunned | Move complete (defender, standing hit) | — |
+| ExecutingMove | PinAttempt | Move feature = Pin | Defender downed |
+| ExecutingMove | SubmissionAttempt | Move feature = Submit | — |
+| Downed | Rising | Rise timer expired | Minimum downed frames passed |
+| Downed | GroundInteraction | Opponent A/B near downed char | Appropriate body position |
+| Downed | PinAttempt | Opponent initiates pin | Prone state, not Falling |
+| Rising | Neutral | Rise complete | — |
+| Rising | Striking.CounterStrike | R held during rise | RecoveringAttack substate |
+| Stunned | Neutral | Stun timer expired | — |
+| Stunned | Downed | Hit during stun | Damage threshold exceeded |
+| Stunned | GrappleHold | Opponent grapples stunned char | Stunned char is defender |
+| PinAttempt | Neutral | Kickout or rope break | — |
+| PinAttempt | MatchEnd | 3-count | — |
+| SubmissionAttempt | Neutral | Escape or rope break | — |
+| SubmissionAttempt | MatchEnd | Tap-out | — |
+| Neutral.Idle | Aerial.ClimbingTurnbuckle | D-Pad toward corner + C-Down | Near turnbuckle |
+| Aerial.OnTopRope | ExecutingMove | C-Down released (attack) | Target in range |
+| Aerial.OnTopRope | Taunt.CornerTaunt | Control Stick | — |
+| IrishWhip.WhipFollowUp | Striking | B pressed, opponent rebounding | Timing window |
+| IrishWhip.WhipFollowUp | GrappleHold.IrishWhipHold | A pressed, opponent rebounding | Timing window |
+| Any | Stunned.Dazed | HIT_RECEIVED (light) | Not in iframes |
+| Any | Downed.Falling | HIT_RECEIVED (heavy) | Not in iframes |
+
+---
+
+## APPENDIX B: FRAME CONSTANTS
+
+| Constant | Value | Notes |
+|----------|-------|-------|
+| `STRONG_GRAPPLE_HOLD_THRESHOLD` | 12 frames | A held ≥ 12 frames = strong grapple |
+| `GRAPPLE_RANGE` | TBD units | Proximity distance for grapple initiation |
+| `FRONT_WEAK_HOLD_WINDOW` | 30 frames | Max time in weak grapple hold before timeout |
+| `FRONT_STRONG_HOLD_WINDOW` | 45 frames | Max time in strong grapple hold before timeout |
+| `PERFECT_BLOCK_WINDOW` | 2 frames | ± from opponent strike impact frame |
+| `BLOCK_WINDOW` | 6 frames | ± from opponent strike impact frame |
+| `RISING_IFRAMES` | 10 frames | Invincibility after starting to rise |
+| `MIN_DOWNED_FRAMES` | 30 frames | Minimum time on mat before rise possible |
+| `MAX_DOWNED_FRAMES_COLD` | 180 frames | Max downed time at lowest spirit |
+| `MAX_DOWNED_FRAMES_HOT` | 60 frames | Max downed time at highest spirit |
+| `SPECIAL_THRESHOLD` | 200 | Spirit value (0-255) to activate Special |
+| `SPECIAL_DURATION_FRAMES` | 600 frames | Special expires if no finisher executed |
+| `MAX_POSITION_SWITCHES` | 3 | L-button front↔back switches per hold |
+| `SPIRIT_REVERSAL_WEIGHT` | 0.1 | Per-tier bonus to reversal probability |
+| `STUN_FRAMES_LIGHT` | 20 frames | Daze duration from light hit |
+| `STUN_FRAMES_HEAVY` | 35 frames | Daze duration from heavy hit |
+| `PIN_COUNT_INTERVAL` | 60 frames | Frames between pin counts (1, 2, 3) |
+| `KO_HEAD_THRESHOLD` | 200 | Head damage to enable KO flag moves to KO |
+| `BLEED_HEAD_THRESHOLD` | 150 | Head damage to enable bleed flag moves |
+
+All values are provisional and subject to calibration against original game observation.
