@@ -1,0 +1,76 @@
+# Character Options
+
+Game characters have the following six pages of settings:
+
+1. `Profile / Music`
+2. `Appearance`
+3. `Moves`
+4. `Fighting Style`
+5. `Parameter`
+6. `Ally / Enemy`
+
+## 1. `Profile / Music`
+
+In this page, the following are set:
+
+1. `Name` - This is the name for the character.
+2. `Short Name` - This is a shorter version of the character's name, used in places where the `Name` would not fit.
+3. `Alias` - If set, this is the name shown on the in-match `Attitude Meter`.  If left blank, the `Short Name` is used.
+4. `Picture` - A 64px x 64px png image with the character's face and a transparent background.
+5. `Height` - Each character is assigned a `Height` between 5'0 and 7'11
+6. `Weight` - Each character is assigned a `Weight` between 100 lbs and 599 lbs.
+7. `Music` - The song which will play when a character is making their entrance.
+8. `Titantron` - A short entrance video which plays at the beginning of a character's entrance.  If left empty, no video will play.
+
+## 2. `Appearance`
+
+1. `Body`
+2. `Head`
+3. `Face`
+4. `Hair`
+5. `Facial Hair`
+6. `Masks / Etc`
+7. `Hats / Caps`
+8. `Ring Attire`
+9. `Upper Body`
+10. `Tattoo`
+11. `Wrist Band`
+12. `Elbow Pad`
+13. `Knee Pad`
+14. `Feet` - The attire worn on the feet.
+
+| Boots 1  | Leg Guards | Boots 2     | Others     | None |
+| -------- | ---------- | ----------- | ---------- | ---- |
+| Boots 01 | Padded 1   | Pull-Ons 01 | Athletic 1 | None |
+| Boots 02 | Padded 2   | Pull-Ons 02 | Athletic 2 |      |
+| Boots 03 | Padded 3   | Pull-Ons 03 | Athletic 3 |      |
+| Boots 04 | Padded 4   | Pull-Ons 04 | Athletic 4 |      |
+| Boots 05 | Padded 5   | Pull-Ons 05 | Athletic 5 |      |
+| Boots 06 | Padded 6   | Pull-Ons 06 | Kung Fu    |      |
+| Boots 07 | Padded 7   | Pull-Ons 07 | Supporter  |      |
+| Boots 08 | Padded 8   | Pull-Ons 08 | Tabi       |      |
+| Boots 09 | Padded 9   | Pull-Ons 09 | Taped      |      |
+| Boots 10 |            | Pull-Ons 10 |            |      |
+| Boots 11 |            | Pull-Ons 11 |            |      |
+| Boots 12 |            | Pull-Ons 12 |            |      |
+| Boots 13 |            | Pull-Ons 13 |            |      |
+| Boots 14 |            | Pull-Ons 14 |            |      |
+| Boots 15 |            | Pull-Ons 15 |            |      |
+| Boots 16 |            | Pull-Ons 16 |            |      |
+| Boots 17 |            | Pull-Ons 17 |            |      |
+| Boots 18 |            | Pull-Ons 18 |            |      |
+| Boots 19 |            | Pull-Ons 19 |            |      |
+| Boots 20 |            | Pull-Ons 20 |            |      |
+| Boots 21 |            |             |            |      |
+
+15. `Entrance Attire` - An outfit to be worn by the character when making their entrance. Optional.
+16. `Weapons / Props` - A weapon or prop for the character to hold when making their entrance.  Optional. 
+
+## 3. `Moves`
+
+## 4. `Fighting Style`
+
+## 5. `Parameter`
+
+## 6. `Ally / Enemy`
+
