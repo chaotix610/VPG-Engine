@@ -41,86 +41,595 @@ The core design principles are:
 - **Texture compatibility** — the texture system is designed so that PNG files ripped from the original No Mercy ROM (via emulator tools) can be dropped into a character folder and mapped to the model with a manifest file
 
 ---
+## Project Philosophy
+
+> Data-driven. Frame-deterministic. N64-faithful. Zero frameworks.
+
+Every wrestler is a JSON file. Every move is a JSON entry. Every mechanic — damage, reversals, spirit, specials — is derived from the documented AKI/VPW2 source research. The engine is Babylon.js + vanilla JS. Assets are Blockbench → Blender → GLB.
+
+---
+
+## Technology Stack
+
+|Layer|Technology|Purpose|
+|---|---|---|
+|**Renderer**|Babylon.js 6.x|Scene, camera, meshes, materials, animation groups|
+|**Runtime**|Vanilla JS (ES2022 modules)|Game loop, state machines, input, audio|
+|**Assets — Models**|Blockbench → Blender → GLB|Character rigs, ring, arena, props|
+|**Assets — Textures**|Blockbench / Aseprite|N64-style low-res diffuse maps (128×128 / 256×256)|
+|**Data**|JSON|Characters, moves, move slots, parameters, arenas, rosters|
+|**Audio**|Howler.js|SFX and music playback|
+|**Dev Server**|Vite|HMR, module bundling|
+|**Testing**|Vitest|Unit tests for game logic (damage, reversals, FSM)|
+|**Build**|Vite prod build|Single deployable dist/ folder|
+
+---
 
 ## Folder Structure
 
 ```
-vpg-engine/
+virtual-pro-grappler/
 │
-├── public/                          # Static assets served directly
-│   ├── index.html
+├── index.html
+├── package.json
+├── vite.config.js
+├── vitest.config.js
+│
+├── public/
 │   └── favicon.ico
 │
-├── src/                             # All game source code
-│   ├── main.js                      # Entry point, initializes Babylon.js scene
-│   ├── engine/                      # Core game systems
-│   │   ├── SceneManager.js          # Ring, camera, lighting setup
-│   │   ├── InputManager.js          # Controller/keyboard input handling
-│   │   ├── PhysicsManager.js        # Babylon.js physics setup
-│   │   └── MatchManager.js          # Match state, win conditions, referee logic
+├── assets/
+│   ├── models/                     # Source files (NOT imported by engine)
+│   │   ├── blockbench/             # .bbmodel source files
+│   │   │   ├── characters/
+│   │   │   ├── ring/
+│   │   │   └── arena/
+│   │   └── blender/                # .blend source files (for rig validation)
+│   │       ├── characters/
+│   │       └── ring/
 │   │
-│   ├── characters/                  # Character logic
-│   │   ├── Character.js             # Base character class
-│   │   ├── CharacterLoader.js       # Loads GLB + applies texture manifest
-│   │   ├── CharacterController.js   # Movement, state machine (standing/grappled/downed)
-│   │   └── AnimationController.js   # Blends and triggers animations
+│   ├── glb/                        # Exported GLBs (consumed by engine)
+│   │   ├── characters/
+│   │   │   ├── rock.glb
+│   │   │   ├── austin.glb
+│   │   │   └── caw_template.glb
+│   │   ├── ring/
+│   │   │   └── ring_standard.glb
+│   │   └── arenas/
+│   │       ├── raw.glb
+│   │       ├── smackdown.glb
+│   │       └── wrestlemania.glb
 │   │
-│   ├── moves/                       # Move system
-│   │   ├── MoveEngine.js            # Reads move slots, executes moves
-│   │   ├── GrappleSystem.js         # Grapple initiation, weak/strong logic
-│   │   ├── CollisionDetector.js     # Hitbox checks for strikes and grapples
-│   │   └── FinisherSystem.js        # Special meter, finisher triggers
-│   │
-│   └── ui/                          # HUD and menus
-│       ├── HUD.js                   # Health bars, special meter, timer
-│       ├── MainMenu.js
-│       └── CharacterSelect.js
-│
-├── assets/                          # All game assets
-│   ├── characters/                  # One folder per wrestler
-│   │   └── the_rock/
-│   │       ├── model.glb            # Blockbench export
-│   │       ├── textures/
-│   │       │   ├── base/            # Skin/body base textures
-│   │       │   ├── attire_1/
-│   │       │   ├── attire_2/
-│   │       │   ├── attire_3/
-│   │       │   └── attire_4/
-│   │       ├── attire_1.json        # Texture manifest for attire 1
-│   │       ├── attire_2.json
-│   │       ├── attire_3.json
-│   │       ├── attire_4.json
-│   │       └── moves.json           # This wrestler's move slot assignments
-│   │
-│   ├── ring/                        # Ring and arena assets
-│   │   ├── ring.glb
-│   │   ├── textures/
-│   │   └── arena.glb
-│   │
-│   ├── animations/                  # Shared animation clips (used by all wrestlers)
-│   │   ├── grapple/
-│   │   ├── strikes/
-│   │   ├── ground/
-│   │   ├── turnbuckle/
-│   │   └── taunts/
+│   ├── textures/
+│   │   ├── characters/
+│   │   │   ├── rock/
+│   │   │   │   ├── attire_1_body.png
+│   │   │   │   ├── attire_1_face.png
+│   │   │   │   └── attire_2_body.png
+│   │   │   └── shared/
+│   │   │       └── skin_base.png
+│   │   ├── ring/
+│   │   │   ├── canvas_raw.png
+│   │   │   └── canvas_smackdown.png
+│   │   └── ui/
+│   │       ├── healthbar.png
+│   │       ├── spirit_pips.png
+│   │       └── fonts/
+│   │           └── n64_font.png
 │   │
 │   └── audio/
 │       ├── sfx/
+│       │   ├── punch_01.wav
+│       │   ├── crowd_cheer.wav
+│       │   └── ...
 │       └── music/
+│           ├── theme_rock.mp3
+│           └── ...
 │
-├── data/                            # Game data and reference documents
-│   ├── moves/
-│   │   └── Moves.md                 # Master move slot reference document
-│   └── characters/
-│       └── roster.json              # List of all playable characters
+├── data/
+│   ├── schemas/                    # JSON Schema definitions (validation)
+│   │   ├── character.schema.json
+│   │   ├── move.schema.json
+│   │   ├── move-slots.schema.json
+│   │   └── arena.schema.json
+│   │
+│   ├── move-slots.json             # Canonical slot → input mapping (from move-slots.md)
+│   │
+│   ├── moves/                      # Individual move entries
+│   │   ├── grapples/
+│   │   │   ├── rock_bottom.json
+│   │   │   ├── stunner.json
+│   │   │   └── suplex_vertical.json
+│   │   ├── strikes/
+│   │   │   ├── punch_jab.json
+│   │   │   └── big_boot.json
+│   │   └── submissions/
+│   │       ├── sharpshooter.json
+│   │       └── figure_four.json
+│   │
+│   ├── characters/                 # Per-wrestler data packages
+│   │   ├── rock.json
+│   │   ├── austin.json
+│   │   └── _template.json
+│   │
+│   └── arenas/
+│       ├── raw.json
+│       └── wrestlemania.json
 │
-├── tools/                           # Dev utilities (not shipped with the game)
-│   └── texture-mapper/              # Tool for mapping hashed No Mercy texture filenames to body parts
+├── src/
+│   ├── main.js                     # Entry point — bootstraps engine
+│   │
+│   ├── engine/
+│   │   ├── GameEngine.js           # Master game loop (fixed 60fps timestep)
+│   │   ├── InputBuffer.js          # Frame-timestamped input capture + tap/hold detection
+│   │   ├── FrameClock.js           # Deterministic frame counter
+│   │   └── TokenManager.js         # Atomic activeMoveToken per fighter
+│   │
+│   ├── renderer/
+│   │   ├── SceneManager.js         # Babylon.js scene, camera, lighting setup
+│   │   ├── CharacterRenderer.js    # GLB load, skeleton, animation group control
+│   │   ├── ArenaRenderer.js        # Arena GLB + texture swap (canvas per event)
+│   │   ├── MaterialManager.js      # Per-part texture application from JSON manifest
+│   │   └── N64PostProcess.js       # Post-processing: dither, color reduction, scanlines
+│   │
+│   ├── fsm/
+│   │   ├── HFSM.js                 # Hierarchical FSM base (State, HFSM classes)
+│   │   ├── states/
+│   │   │   ├── NeutralState.js     # Idle, Moving, Running, Evading
+│   │   │   ├── EngagementState.js  # GrappleInitiation, GrappleHold, ExecutingMove
+│   │   │   ├── DamageState.js      # HitStun, Knockdown, Rising, RecoveringAttack
+│   │   │   └── GroundedState.js    # Prone, Submission, Pinning
+│   │   └── regions/
+│   │       ├── SpecialMeterRegion.js   # Orthogonal: spirit tracking, isSpecialActive
+│   │       └── InteractionRegion.js    # Orthogonal: distance, facing angle flags
+│   │
+│   ├── combat/
+│   │   ├── SlotResolver.js         # Input + context → move slot ID (+ finisher override)
+│   │   ├── MoveInstance.js         # Live move execution object (frame counter, hitboxes)
+│   │   ├── DamageCalculator.js     # Factors 1–4 from move-damage.md
+│   │   ├── ReversalSystem.js       # Full AKI reversal probability (REVERSALS.md)
+│   │   ├── JointStaminaTracker.js  # 5-limb stamina pools (move-damage.md §2)
+│   │   ├── HealthTracker.js        # Current + Max health (move-damage.md §1)
+│   │   ├── SubmissionEscape.js     # Wrench minigame + submission skill matrix
+│   │   └── PinSystem.js            # Kickout window + pin logic
+│   │
+│   ├── characters/
+│   │   ├── Fighter.js              # Composite fighter: FSM + regions + health + renderer ref
+│   │   ├── CharacterLoader.js      # Loads character JSON → Fighter instance
+│   │   └── CAWManager.js           # Create-A-Wrestler: slot management, save/load
+│   │
+│   ├── match/
+│   │   ├── MatchRules.js           # Rules object: time limit, count-out, DQ, bloodshed...
+│   │   ├── MatchController.js      # Referee logic, win conditions, interference
+│   │   ├── RingBounds.js           # Ring geometry, ropes, apron, outside zones
+│   │   └── CountOutTimer.js        # Count-out tracking per fighter
+│   │
+│   ├── ui/
+│   │   ├── HUD.js                  # Health bars, spirit pips, timer (canvas-based)
+│   │   ├── MainMenu.js             # Main menu screen (Single/Multi/Commissioner)
+│   │   ├── SuperstarSelect.js      # Grid-based roster browser (superstar-select.md)
+│   │   ├── MatchSetup.js           # Match/Player/Arena/Rules/Belt pages
+│   │   ├── CharacterOptions.js     # Edit Superstar — character-options.md fields
+│   │   └── MoveEditor.js           # Assign moves to slots UI
+│   │
+│   ├── data/
+│   │   ├── DataLoader.js           # Async JSON fetch + schema validation
+│   │   ├── MoveRegistry.js         # Indexed move lookup by ID
+│   │   └── RosterRegistry.js       # Stable pages + slot management
+│   │
+│   └── utils/
+│       ├── MathUtils.js            # Integer floor helpers used in damage formulas
+│       ├── RNGSystem.js            # Deterministic seeded RNG (reversals, interference)
+│       └── DebugOverlay.js         # Frame counter, FSM state, hitbox visualiser
 │
-└── README.md
+└── tests/
+    ├── combat/
+    │   ├── DamageCalculator.test.js
+    │   ├── ReversalSystem.test.js
+    │   └── JointStamina.test.js
+    ├── fsm/
+    │   ├── HFSM.test.js
+    │   └── SlotResolver.test.js
+    └── data/
+        └── CharacterLoader.test.js
 ```
 
 ---
+
+
+## JSON Data Formats
+
+### Character (`data/characters/rock.json`)
+
+```json
+{
+  "id": "rock",
+  "displayName": "The Rock",
+  "height": "6'5\"",
+  "weight": "275 lbs",
+  "glb": "assets/glb/characters/rock.glb",
+  "attires": [
+    {
+      "type": 1,
+      "label": "Default",
+      "textures": {
+        "body": "assets/textures/characters/rock/attire_1_body.png",
+        "face": "assets/textures/characters/rock/attire_1_face.png"
+      }
+    }
+  ],
+  "parameters": {
+    "offense": { "head": 2, "body": 3, "arms": 4, "legs": 2, "flying": 2 },
+    "defense": { "head": 2, "body": 3, "arms": 2, "legs": 2, "flying": 2 }
+  },
+  "submissionSkill": "normal",
+  "weightFactor": 5,
+  "moveSlots": {
+    "frontWeakGrappleSlot1": "snap_mare",
+    "frontWeakGrappleSlot2": "arm_drag",
+    "frontStrongGrappleSlot1": "belly_to_belly_suplex",
+    "frontFinisherSlot": "rock_bottom",
+    ...
+  }
+}
+```
+
+### Move (`data/moves/grapples/rock_bottom.json`)
+
+```json
+{
+  "id": "rock_bottom",
+  "displayName": "Rock Bottom",
+  "type": "grapple",
+  "attackParameter": "body",
+  "defenseParameter": "body",
+  "baseHealthDamage": 28,
+  "totalFrames": 64,
+  "hitFrames": [38, 39, 40],
+  "reversalWindow": { "start": 5, "end": 18 },
+  "jointStaminaDamage": { "body": 6, "flying": 0 },
+  "technicalFlag": false,
+  "animationId": "anim_rock_bottom"
+}
+```
+
+---
+
+## Dependencies (`package.json`)
+
+```json
+{
+  "dependencies": {
+    "@babylonjs/core": "^6.x",
+    "@babylonjs/loaders": "^6.x",
+    "@babylonjs/inspector": "^6.x",
+    "howler": "^2.2.x"
+  },
+  "devDependencies": {
+    "vite": "^5.x",
+    "vitest": "^1.x",
+    "@vitest/ui": "^1.x",
+    "ajv": "^8.x"
+  }
+}
+```
+
+---
+
+## Build Phases
+
+### Phase 0 — Repo & Scaffold _(Week 1)_
+
+Stand up the repository, dev tooling, and Babylon.js hello-world with a GLB loading test.
+
+**Deliverables:**
+
+- `package.json`, `vite.config.js`, `vitest.config.js`
+- `index.html` with Babylon.js canvas
+- `SceneManager.js` — initialises engine, scene, arcRotate camera, basic lighting
+- `DataLoader.js` — fetch + AJV schema validation
+- GLB round-trip test: export a Blockbench cube → load it in Babylon.js
+- Folder structure created (empty dirs with `.gitkeep`)
+
+---
+
+### Phase 1 — Asset Pipeline _(Weeks 2–4)_
+
+Establish the Blockbench → Blender → GLB → Babylon.js pipeline before writing any gameplay code.
+
+**1A — Character Rig Standard**
+
+- Define bone naming convention (matched to Babylon.js skeleton node names)
+- Build `caw_template.bbmodel` in Blockbench (humanoid rig, N64 proportions)
+- Validate in Blender: check bone rolls, rest pose, no broken weights
+- Export `caw_template.glb`
+- Write `CharacterRenderer.js`: load GLB, attach skeleton, test pose via bone transform
+
+**1B — Animation Set (Core)** Minimum animations required before gameplay begins:
+
+- Idle stand
+- Walk forward / back / strafe
+- Run
+- Grapple initiation reach
+- Hit stun (front/back)
+- Knockdown (front/back)
+- Getup
+- Two placeholder grapple executions
+
+Export each animation as a named `AnimationGroup` embedded in the character GLB.
+
+**1C — Ring & Arena**
+
+- Build ring in Blockbench (posts, ropes, apron, canvas)
+- Export `ring_standard.glb`
+- `ArenaRenderer.js`: load ring, swap canvas texture per arena JSON
+- Placeholder skybox / backdrop per arena
+
+**1D — Texture Manifest System**
+
+- `MaterialManager.js`: reads attire JSON → applies textures to named mesh parts
+- Test with The Rock attire 1 and attire 2 swap
+
+---
+
+### Phase 2 — Input & Core Loop _(Week 5)_
+
+The deterministic backbone everything else depends on.
+
+**Deliverables:**
+
+- `FrameClock.js` — fixed 60fps timestep, frame index counter
+- `InputBuffer.js` — keyboard + gamepad polling, tap vs hold detection, frame timestamp
+- `GameEngine.js` — master `update()` loop: input → regions → FSM → combat eval → render
+- `RNGSystem.js` — seeded deterministic RNG for reversals and interference rolls
+- `TokenManager.js` — per-fighter atomic move token
+
+**Input Mapping (Keyboard defaults):**
+
+```
+A Button    → Z key
+B Button    → X key
+L Button    → Q key
+R Button    → E key
+C-Down      → Shift (run)
+D-Pad       → Arrow keys
+Control Stick → WASD
+```
+
+---
+
+### Phase 3 — Hierarchical FSM _(Weeks 6–7)_
+
+The core state machine from `HSFM_Blueprint.md`.
+
+**Deliverables:**
+
+- `HFSM.js` — base `State` class, `HFSM` class with transition matrix enforcement
+- `SpecialMeterRegion.js` — spirit accumulation, `isSpecialActive` flag, 100-point scale
+- `InteractionRegion.js` — distance check, facing angle, `inGrappleRange`, `isBehindOpponent`
+- `NeutralState.js` — Idle, Moving, Running, Evading substates
+- `EngagementState.js` — GrappleInitiation (transient), GrappleHold (4 substates), ExecutingMove
+- `DamageState.js` — HitStun, Knockdown, Rising, RecoveringAttack
+- `GroundedState.js` — Prone, Submission, Pinning
+- `Fighter.js` — assembles FSM + regions + health + renderer reference
+
+**Test milestone:** Two fighters instantiated. Player 1 can walk toward Player 2, initiate a grapple, FSM transitions logged to console.
+
+---
+
+### Phase 4 — Move System _(Weeks 8–10)_
+
+The slot resolver, move instance execution, and damage calculation.
+
+**4A — Data Layer**
+
+- All move JSON schemas defined and validated
+- `move-slots.json` complete (mirrors `move-slots.md`)
+- `MoveRegistry.js` — indexed lookup by move ID
+- 10–15 moves authored as JSON (representative set: 2 front weak, 2 front strong, 1 back, 2 strikes, 1 submission, 1 finisher)
+
+**4B — Slot Resolver**
+
+- `SlotResolver.js` — maps (grapple state substate + input combo + context) → move slot ID
+- Finisher override: if `SpecialMeterRegion.isSpecialActive` → return finisher slot
+- Unit tests covering all 8 front-weak slots, 4 back slots, finisher override
+
+**4C — Move Execution**
+
+- `MoveInstance.js` — owns frame counter, advances per update, checks hitFrames, checks reversalWindow
+- `ExecutingMove` state integration: acquires token on enter, releases on exit
+- Animation playback: `CharacterRenderer.js` plays named `AnimationGroup` for move ID
+
+**4D — Damage Calculation**
+
+- `HealthTracker.js` — CurrentHealth (255), MaxHealth (255, floor 64), regen logic
+- `JointStaminaTracker.js` — 5 limb pools (50.0 each), never regenerate, limb-hold threshold at 15.0
+- `DamageCalculator.js` — full 4-factor formula from `move-damage.md`:
+    - Factor 1: `floor((jointStamina + 50) × baseDamage × 0.01)` (S=50 when Special)
+    - Factor 2: `floor(max(0, offenseParam - defenseParam) × baseDamage × 0.1)`
+    - Factor 3: `floor(spiritDelta × 0.05)` capped at 5
+    - Factor 4: `floor(T × 1.2)` if Special, else T
+    - MaxHealth damage: `floor(mainHealthDamage / 4)`
+    - Technical flag (0x08): skip CurrentHealth damage
+
+**Unit tests:** Figure Four worked example from `move-damage.md §7` must pass exactly.
+
+---
+
+### Phase 5 — Reversal System _(Week 11)_
+
+Full AKI reversal probability engine from `REVERSALS.md`.
+
+**Deliverables:**
+
+- `ReversalSystem.js`:
+    - Spirit band lookup table (6 bands, 0–1000 scale)
+    - Weight factor adjustment: `floor(DEF_weight/3) - floor(ATK_weight/3)` → ×2 if >0
+    - Strong grapple health scaling: ×4 if health ≥192, ×2 if ≥128 (CurrentHealth vs MaxHealth depending on Special)
+    - Special mode rules: disabled if attacker in Special and defender not; normal if both in Special
+    - RNG roll: `RNG < probability` check using `RNGSystem`
+- Integration into `ExecutingMove.onUpdate()`: poll reversal on each frame within window
+- Reversal success: defender becomes attacker, new `MoveInstance` created for reversal move
+
+**Unit tests:** Dragon Kid vs Magnum TOKYO weight example (25% → 50%) must pass.
+
+---
+
+### Phase 6 — Submissions & Pins _(Week 12)_
+
+The two win conditions beyond knockout.
+
+**Deliverables:**
+
+- `SubmissionEscape.js`:
+    - Submission skill matrix (Novice/Normal/Expert × Novice/Normal/Expert)
+    - Per-wrench joint stamina bonus `B` applied to each affected limb
+    - Escape condition: mash input reduces a separate "escape meter" working against hold pressure
+- `PinSystem.js`:
+    - Kickout window (frames configurable per move)
+    - Button mash detection during pin
+    - Referee count display sync
+
+---
+
+### Phase 7 — Match Controller & Rules _(Week 13)_
+
+Wraps fighters into a match with configurable rules (from `main-menu.md` Rules page).
+
+**Deliverables:**
+
+- `MatchRules.js` — data object: timeLimit, countOut (10/20/Hardcore/None), pin, submission, TKO, ropeBreak, DQ, bloodshed, interference
+- `RingBounds.js` — ring geometry zones: canvas, apron, ringside, outside; rope break detection
+- `CountOutTimer.js` — per-fighter counter when outside ring
+- `MatchController.js`:
+    - Win condition evaluation (pin, submission, TKO, count-out, DQ, first blood)
+    - Interference spawn (30/45/60s random, ally/enemy weighting)
+    - Belt assignment result
+
+---
+
+### Phase 8 — HUD & UI _(Weeks 14–15)_
+
+**8A — HUD (In-Match)**
+
+- `HUD.js` — canvas-drawn overlay:
+    - Dual health bars (CurrentHealth shown, MaxHealth as depleted cap — N64 faithful)
+    - Spirit pip row (special meter, 0–100 in increments)
+    - Timer display
+    - Belt indicator if title match
+    - Limb damage icons (light up when stamina < 15)
+
+**8B — Main Menu**
+
+- `MainMenu.js` — three-screen horizontal navigator (Single Play / Multi Play / Commissioner)
+- N64 aesthetic: pixelated font, dark gradient backgrounds, cursor highlight
+
+**8C — Match Setup Flow**
+
+- `MatchSetup.js` — 5 sequential pages: Match → Player → Arena → Rules → Belt
+- Each page implemented as a screen state in the UI state machine
+
+**8D — Superstar Select**
+
+- `SuperstarSelect.js` — 3×3 grid, stable pages, attire type cycling, 3D model preview
+- Mirrors spec in `superstar-select.md` exactly (10 pages, empty pages skipped)
+- C-Left/C-Right attire swap, Control Stick model rotation
+
+**8E — Commissioner**
+
+- Smackdown Mall stub: Superstar Options (Edit / Create / Clone / Change Stable)
+- `CharacterOptions.js` — move slot assignment, parameter editing
+- `CAWManager.js` — 18-slot save data (2 pages × 9 slots)
+
+---
+
+### Phase 9 — Match Types _(Weeks 16–18)_
+
+Layer additional match types onto the core single-match foundation.
+
+|Match Type|New Systems Required|
+|---|---|
+|**Tag Match**|Tag partner AI, hot-tag mechanic, legal-man enforcement|
+|**Royal Rumble / Survival**|Entry queue, over-the-top elimination, 4-fighter ring|
+|**Cage Match**|Cage geometry, climb mechanic, escape win condition|
+|**Ladder Match**|Ladder object, climb system, briefcase retrieval|
+|**Ironman Match**|Fall counter, time-limited, most falls wins|
+|**Triple Threat**|3-fighter logic, who pins whom|
+|**Handicap**|2v1 tag rules, CPU partner coordination|
+
+---
+
+### Phase 10 — Championship / Career Mode _(Week 19)_
+
+Single-player career paths from `main-menu.md`.
+
+**Deliverables:**
+
+- Championship paths: World Heavyweight, Intercontinental, Tag Team, Women's, European, Hardcore
+- Opponent ladder (fixed challengers per belt path)
+- Smackdown Mall currency earned per match
+- Unlock system: hidden characters revealed on championship completion
+- Save/load (localStorage, or IndexedDB for robustness)
+
+---
+
+### Phase 11 — Polish & N64 Aesthetic _(Week 20)_
+
+The rendering pass that makes it look right.
+
+**Deliverables:**
+
+- `N64PostProcess.js`:
+    - Babylon.js `PostProcess` shader: reduce to 256-color palette
+    - Optional scanline overlay (toggle)
+    - Dithering pass for smooth-to-solid transitions
+- Babylon.js `StandardMaterial` — no PBR (matches N64 flat shading look)
+- Low-res shadow maps (256×256 blob shadows, not raycast)
+- Crowd fill: billboard sprites in stadium seating
+- Entrance: fighter walks down ramp with entry taunt, pyro particle effect
+
+---
+
+### Phase 12 — Audio _(Ongoing, finalized Week 20)_
+
+- Howler.js integration throughout
+- SFX events fired from `MoveInstance` on hitFrames
+- Character entrance themes
+- Crowd reaction system (responds to spirit level, near-falls, finishers)
+- Menu music
+
+---
+
+## Testing Strategy
+
+|Test Type|Tool|Coverage Target|
+|---|---|---|
+|Unit — Damage formulas|Vitest|Factor 1–4, Max Health, Technical flag|
+|Unit — Reversal probability|Vitest|All spirit bands, weight factor, health scaling, Special rules|
+|Unit — Slot resolver|Vitest|All input combos, finisher override|
+|Unit — FSM transitions|Vitest|Legal transitions only, illegal transitions warned|
+|Unit — Joint stamina|Vitest|Submission skill matrix, per-wrench math|
+|Integration — Match flow|Vitest|Full pin win condition from neutral state|
+|Visual — Asset pipeline|Manual|GLB loads, textures apply, animations play|
+
+The worked example from `move-damage.md §7` (Figure Four Leglock) is the canonical integration test for the damage system.
+
+---
+
+## Milestone Summary
+
+| Milestone            | Phase(s) | Target                                        |
+| -------------------- | -------- | --------------------------------------------- |
+| **M1: Render Proof** | 0–1      | Fighter GLB loads, walks in arena             |
+| **M2: Input + FSM**  | 2–3      | Two fighters, grapple transitions logged      |
+| **M3: First Move**   | 4        | One move executes end-to-end with damage      |
+| **M4: Reversal**     | 5        | Reversal probability system live, testable    |
+| **M5: Full Match**   | 6–7      | Pin or submission wins, rules enforced        |
+| **M6: Playable**     | 8        | HUD + Superstar Select + Exhibition mode      |
+| **M7: Match Types**  | 9        | All 7 match types functional                  |
+| **M8: Career**       | 10       | Championship mode with unlocks                |
+| **M9: Ship**         | 11–12    | N64 aesthetic pass, audio, performance review |
+
 
 ## Character System
 
